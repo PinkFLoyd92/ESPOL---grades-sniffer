@@ -10,4 +10,10 @@
     tools:context="com.fenonimous.polstalk.MainActivity"
     android:weightSum="1">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/app_bar"/>
+    </RelativeLayout>
+
 </LinearLayout>
