@@ -7,20 +7,10 @@
     tools:context="com.fenonimous.polstalk.MainActivity"
     android:weightSum="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/textViewWebServices"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="150dp"
-        android:hint="texto..." />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Llamar"
-        android:id="@+id/llamarBtn"
-        android:layout_gravity="center_horizontal" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/app_bar"/>
+    </RelativeLayout>
 
 </LinearLayout>
