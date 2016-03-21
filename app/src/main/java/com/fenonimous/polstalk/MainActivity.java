@@ -18,8 +18,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.actionbar_principal);
         setSupportActionBar(myToolbar);
         WebService soap = new WebService();
+        soap.setNombre_a_buscar("andres");
+        soap.setApellido_a_buscar("caceres");
+        soap.setOpcion_escogida("wsConsultarPersonaPorNombres"); // ponemos el nombre del metodo.
         soap.start();
-       // while(soap.getRun_state()!=1);
+       while(soap.getRun_state()!=1);
         //String response = soap.getWebResponse();
         //Log.d("app",response);
 
