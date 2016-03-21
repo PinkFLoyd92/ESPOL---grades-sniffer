@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">PolStalk</string>
     <string name="next">Next</string>
+    <string name="action_settings">Configuración</string>
+    <string name="action_favorite">Favoritos</string>
 </resources>
