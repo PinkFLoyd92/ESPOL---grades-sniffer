@@ -25,14 +25,30 @@
             android:layout_marginBottom="189dp">
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="119dp"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="Name"
                 android:ems="10"
-                android:id="@+id/editText"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1" />
+                android:id="@+id/nombres"
+                android:hint="nombres"
+                android:layout_gravity="center_vertical" />
+
+            <EditText
+                android:layout_width="143dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:hint="apellidos"
+                android:id="@+id/apellidos"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="68dp"
+                android:text="BUSCAR"
+                android:id="@+id/button"
+                android:layout_gravity="bottom" />
+
         </LinearLayout>
     </RelativeLayout>
 

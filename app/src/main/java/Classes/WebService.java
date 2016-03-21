@@ -24,12 +24,20 @@ import Classes.StalkUsers.Estudiante;
  */
 
 public class WebService extends Thread{
-    ArrayList<Estudiante> estudiantes_from_consulta;
+    private ArrayList<Estudiante> estudiantes_from_consulta;
     private String opcion_escogida = "";
     private String nombre_a_buscar = "";
     private String apellido_a_buscar = "";
     public String getApellido_a_buscar() {
         return apellido_a_buscar;
+    }
+
+    public ArrayList<Estudiante> getEstudiantes_from_consulta() {
+        return estudiantes_from_consulta;
+    }
+
+    public void setEstudiantes_from_consulta(ArrayList<Estudiante> estudiantes_from_consulta) {
+        this.estudiantes_from_consulta = estudiantes_from_consulta;
     }
 
     public void setApellido_a_buscar(String apellido_a_buscar) {
@@ -53,7 +61,7 @@ public class WebService extends Thread{
     }
 
     private int run_state = -1;
-    private static final String NAMESPACE = "https://ws.espol.edu.ec/";
+    private static final String NAMESPACE ="http://tempuri.org/";
     private static final String URL = "https://ws.espol.edu.ec/saac/wsandroid.asmx";
     private String webResponse;
 
@@ -146,10 +154,26 @@ public void clear_variables(){
             HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
             androidHttpTransport.debug = true;
             androidHttpTransport.call("http://tempuri.org/wsConsultarPersonaPorNombres", envelope);
-            SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+            SoapObject response = (SoapObject) envelope.getResponse();
             webResponse = response.toString();
+
+            SoapObject root = (SoapObject) response.getProperty(1);
+            SoapObject datos_root2 = (SoapObject) root.getProperty("NewDataSet");
+            SoapObject datos_persona = new SoapObject();
+            for (int i= 0; i<datos_root2.getPropertyCount();i++){
+                datos_persona = (SoapObject) datos_root2.getProperty(i);
+                String nombres = datos_persona.getProperty("NOMBRES").toString();
+                String apellidos = datos_persona.getProperty("APELLIDOS").toString();
+                String cod_estudiante = datos_persona.getProperty("CODESTUDIANTE").toString();
+                String numero_identificacion = datos_persona.getProperty("NUMEROIDENTIFICACION").toString();
+                Estudiante temp = new Estudiante(cod_estudiante,numero_identificacion,nombres,apellidos);
+                this.estudiantes_from_consulta.add(temp);
+            }
+            //StringBuilder stringBuilder = new StringBuilder();
+            Log.d("app",datos_root2.getPropertyCount()+"");
+            Log.d("app", datos_persona.toString());
+            Log.d("app",datos_persona.getPropertyCount()+"");
             run_state = 1;
-            Log.d("app",webResponse);
         } catch (Exception e) {
             e.printStackTrace();
         }
