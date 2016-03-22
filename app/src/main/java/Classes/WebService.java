@@ -1,5 +1,8 @@
 package Classes;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import org.ksoap2.SoapEnvelope;
@@ -24,6 +27,10 @@ import Classes.StalkUsers.Estudiante;
  */
 
 public class WebService extends Thread{
+    public WebService(Handler handler) {
+            this.handler = handler;
+    }
+    private Handler handler;
     private ArrayList<Estudiante> estudiantes_from_consulta;
     private String opcion_escogida = "";
     private String nombre_a_buscar = "";
@@ -111,7 +118,9 @@ public void clear_variables(){
                 break;
         }
     }
+    public void test(){
 
+    }
     private void call_hello_world() {
         try {
             SoapObject request = new SoapObject(NAMESPACE,"HelloWorld");
@@ -135,6 +144,13 @@ public void clear_variables(){
         this.estudiantes_from_consulta = new ArrayList<>();
         this.webResponse = "";
         try {
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            //se muestra en el hilo principal la barra de avance del proceso de capturar estudiantes.
+            b.putInt("estado", 1);
+            msg.setData(b);
+            handler.handleMessage(msg);
+
             SoapObject request = new SoapObject(NAMESPACE, "wsConsultarPersonaPorNombres");
             PropertyInfo nombre =new PropertyInfo();
             nombre.setName("nombre");
@@ -174,6 +190,11 @@ public void clear_variables(){
             Log.d("app", datos_persona.toString());
             Log.d("app",datos_persona.getPropertyCount()+"");
             run_state = 1;
+
+            b.clear();
+            b.putInt("estado",-1);
+            msg.setData(b);
+            handler.handleMessage(msg);
         } catch (Exception e) {
             e.printStackTrace();
         }

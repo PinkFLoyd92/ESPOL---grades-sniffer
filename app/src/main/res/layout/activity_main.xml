@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -68,6 +69,19 @@
             android:layout_below="@+id/button"
             android:layout_centerHorizontal="true"
             android:spinnerMode="dropdown" />
+        <com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:radius="11dp"
+            android:color="#8C2323"
+            app:dd_numDots="5"
+            app:dd_scaleMultiplier="1.5"
+            app:dd_animationDuration="500"
+            app:dd_horizontalSpacing="4dp"
+            android:layout_below="@+id/spinner_estudiantes"
+            android:layout_alignRight="@+id/nombres"
+            android:layout_alignEnd="@+id/nombres" />
     </RelativeLayout>
 
 </LinearLayout>

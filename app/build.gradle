@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:gridlayout-v7:23.2.1'
     compile 'com.android.support:mediarouter-v7:23.2.1'
     compile files('/home/sebas/ESPOL---grades-sniffer/ksoap2-android-assembly-3.4.0-jar-with-dependencies/ksoap2-android-assembly-3.4.0-jar-with-dependencies.jar')
+    compile 'com.github.justzak:dilatingdotsprogressbar:1.0.1'
 }
