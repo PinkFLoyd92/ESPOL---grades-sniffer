@@ -195,8 +195,14 @@ public void clear_variables(){
             b.putInt("estado",-1);
             msg.setData(b);
             handler.handleMessage(msg);
-        } catch (Exception e) {
+        } catch (Exception e) {//RUNTIME EXCEPTION,IOEXCEPTION
             e.printStackTrace();
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            b.putInt("estado", -2);
+            msg.setData(b);
+            handler.handleMessage(msg);
+
         }
     }
 

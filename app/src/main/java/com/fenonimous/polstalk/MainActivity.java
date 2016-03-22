@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
 
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.actionbar_principal);
         setSupportActionBar(myToolbar);
         mDilatingDotsProgressBar = (DilatingDotsProgressBar) findViewById(R.id.progress);
-        soap = new WebService(manejador_hilo);
+        //soap = new WebService(manejador_hilo);
         //String response = soap.getWebResponse();
         //Log.d("app",response);
 
@@ -77,6 +78,18 @@ public class MainActivity extends AppCompatActivity {
                 },100);
                 // se inicia la actividad del listview.
                 Log.d("estado: ","terminado"+estado);
+            }else if(estado == -2){
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        ArrayAdapter<String> student_adapter = new ArrayAdapter<String>(getApplicationContext(),
+                                android.R.layout.simple_list_item_1, new ArrayList<String>());
+                        dropdown_estudiantes.setAdapter(student_adapter);
+                        mDilatingDotsProgressBar.hide();
+                        Toast.makeText(getApplicationContext(),"no se han encontrado estudiantes",Toast.LENGTH_SHORT).show();
+                    }
+                },100);
             }
         }
     };
@@ -84,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
     //click en boton submit de consultar.
     public void consultarPersonaPorNombres(View view){
+        soap = new WebService(this.manejador_hilo);
         soap.setNombre_a_buscar(nombres.getText().toString());
         soap.setApellido_a_buscar(apellidos.getText().toString());
         soap.setOpcion_escogida("wsConsultarPersonaPorNombres"); // ponemos el nombre del metodo.
