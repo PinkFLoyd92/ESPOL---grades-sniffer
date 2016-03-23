@@ -79,9 +79,12 @@
             app:dd_scaleMultiplier="1.5"
             app:dd_animationDuration="500"
             app:dd_horizontalSpacing="4dp"
+            android:layout_alignParentBottom="true"
             android:layout_below="@+id/spinner_estudiantes"
-            android:layout_alignRight="@+id/nombres"
-            android:layout_alignEnd="@+id/nombres" />
+            android:layout_alignRight="@+id/matricula"
+            android:layout_alignEnd="@+id/matricula"
+            android:layout_alignLeft="@+id/button"
+            android:layout_alignStart="@+id/button" />
     </RelativeLayout>
 
 </LinearLayout>
