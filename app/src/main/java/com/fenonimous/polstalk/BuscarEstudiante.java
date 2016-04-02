@@ -53,7 +53,6 @@ public class BuscarEstudiante extends CustomActivity {
         apellidos = (EditText)findViewById(R.id.apellido_estudiante);
         matricula = (EditText) findViewById(R.id.matricula_estudiante);
         select_matricula=(CheckBox)findViewById(R.id.select_matricula);
-
     }
 
 
