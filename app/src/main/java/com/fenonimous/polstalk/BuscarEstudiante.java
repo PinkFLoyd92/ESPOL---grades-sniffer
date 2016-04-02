@@ -53,8 +53,7 @@ public class BuscarEstudiante extends CustomActivity {
         apellidos = (EditText)findViewById(R.id.apellido_estudiante);
         matricula = (EditText) findViewById(R.id.matricula_estudiante);
         select_matricula=(CheckBox)findViewById(R.id.select_matricula);
-        dropdown_estudiantes = (Spinner)findViewById(R.id.spinner_estudiantes);
-        mDilatingDotsProgressBar = (DilatingDotsProgressBar) findViewById(R.id.progress);
+
     }
 
 
@@ -68,7 +67,7 @@ public class BuscarEstudiante extends CustomActivity {
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mDilatingDotsProgressBar.showNow();
+                        //mDilatingDotsProgressBar.showNow();
                     }
                 }, 100);
             //si se finaliza el proceso y  ha sido procesada correctamente la solicitud:
@@ -85,19 +84,11 @@ public class BuscarEstudiante extends CustomActivity {
                     public void run() {
 
                         ArrayList<Estudiante> estudiantes = this.msg.getData().getParcelableArrayList("estudiantes");
-                        /*ArrayList<String> estudiantes_nombres = new ArrayList<>();
-                        for (Estudiante e: estudiantes) {
-                            estudiantes_nombres.add(e.getNombres());
-                        }*/
-                        /*ArrayAdapter<String> student_adapter = new ArrayAdapter<String>(getApplicationContext(),
-                                android.R.layout.simple_list_item_1, estudiantes_nombres);
-                        dropdown_estudiantes.setAdapter(student_adapter);
-                        dropdown_estudiantes.setSelection(0);*/
-                       // mDilatingDotsProgressBar.hide();
                         Intent i = new Intent(getApplicationContext(),ListaEstudiantes.class);
                         i.putParcelableArrayListExtra("estudiantes",estudiantes);
-                        startActivity(i);
-                        finish();
+                       // startActivity(i);
+                        //finish();
+                        Toast.makeText(getApplicationContext(),"Se obtuvieron los estudiantes, falta mostrarlos",Toast.LENGTH_LONG);
                     }
                 }.init(msg),100);// parametros necesarios
 

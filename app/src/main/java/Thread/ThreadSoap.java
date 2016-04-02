@@ -93,11 +93,11 @@ public class ThreadSoap extends Thread{
             msg.setData(b);
             handler.handleMessage(msg);
             //se obtienen los estudiantes.
-            estudiantes = this.soapService.call_wsConsultarPersonaPorNombres((String) ((HashMap) mapa_datos.get("parametros")).get("nombre"),
-                    (String) ((HashMap) mapa_datos.get("parametros")).get("apellido"));
+            estudiantes = this.soapService.call_wsConsultarPersonaPorNombres((String) ((HashMap) mapa_datos.get("parametros")).get("nombres"),
+                    (String) ((HashMap) mapa_datos.get("parametros")).get("apellidos"));
 
             b.clear();
-            b.putString("estado","finalizado");
+            b.putString("estado_hilo","finalizado");
             b.putParcelableArrayList("estudiantes",estudiantes);
             msg.setData(b);
             handler.handleMessage(msg);
