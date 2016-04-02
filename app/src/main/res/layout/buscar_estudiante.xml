@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="com.chatt.Login" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/pad_20dp"
+        android:paddingLeft="@dimen/pad_15dp"
+        android:paddingRight="@dimen/pad_15dp"
+        android:paddingTop="@dimen/pad_20dp"
+        android:weightSum="1">
+
+        <EditText
+            android:id="@+id/nombre_estudiante"
+            style="@style/editext_graybg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_username"
+            android:hint="@string/username">
+
+            <requestFocus />
+        </EditText>
+        <EditText
+            android:id="@+id/apellido_estudiante"
+            style="@style/editext_graybg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_username"
+            android:hint="@string/apellido" >
+
+            <requestFocus />
+        </EditText>
+        <EditText
+            android:id="@+id/matricula_estudiante"
+            style="@style/editext_graybg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_play_light"
+            android:hint="@string/matricula_input"
+            android:visibility="gone">
+
+            <requestFocus />
+        </EditText>
+        <LinearLayout
+            android:id="@+id/main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal" >
+
+        </LinearLayout>
+
+        <CheckBox
+            android:layout_width="289dp"
+            android:layout_height="80pt"
+            android:text="@string/matricula"
+            android:id="@+id/select_matricula"
+            android:checked="false"
+            android:onClick="onCheckBoxClick"/>
+
+        <Button
+            android:id="@+id/btnLogin"
+            style="@style/btn_white_large"
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            android:text="@string/buscar_estudiante"
+            android:onClick="consultarPersona"/>
+    </LinearLayout>
+
+</ScrollView>
