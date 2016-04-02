@@ -1,0 +1,179 @@
+package com.fenonimous.polstalk;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.fenonimous.polstalk.custom.CustomActivity;
+import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.fenonimous.polstalk.model.Estudiante;
+import Thread.ThreadSoap;
+
+public class BuscarEstudiante extends CustomActivity {
+    EditText nombres;
+    EditText apellidos;
+    EditText matricula;
+    CheckBox select_matricula;
+    Spinner dropdown_estudiantes;
+    DilatingDotsProgressBar mDilatingDotsProgressBar;
+    ThreadSoap soap; //objeto el cual recibe como parametro
+
+    /*Hashmap formado de la siguiente estructura:
+    soap_method:String, parametros:<parametros enviados>
+    Este diccionario es enviado al hilo para ahi decidir la funcion.*/
+    HashMap mapa_datos;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.buscar_estudiante);
+        inicializar_variables(); //se apunta a los elementos del xml buscar_estudiante, entre otros.
+
+
+    }
+
+
+    public void inicializar_variables(){
+        mapa_datos = new HashMap();
+        nombres = (EditText)findViewById(R.id.nombre_estudiante);
+        apellidos = (EditText)findViewById(R.id.apellido_estudiante);
+        matricula = (EditText) findViewById(R.id.matricula_estudiante);
+        select_matricula=(CheckBox)findViewById(R.id.select_matricula);
+        dropdown_estudiantes = (Spinner)findViewById(R.id.spinner_estudiantes);
+        mDilatingDotsProgressBar = (DilatingDotsProgressBar) findViewById(R.id.progress);
+    }
+
+
+    // handler en el main thread, el cual se comunica con el hilo que procesa el pedido del webservice.
+    final Handler manejador_hilo = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            String estado = msg.getData().getString("estado_hilo");
+            if(estado == "procesando"){
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDilatingDotsProgressBar.showNow();
+                    }
+                }, 100);
+            //si se finaliza el proceso y  ha sido procesada correctamente la solicitud:
+            }else if(estado == "finalizado"){
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    Message msg;
+                    public Runnable init(Message msg){
+                        this.msg = msg;
+                        return this;
+                    }
+                    @Override
+                    //iniciamos la nueva actividad en esta parte.
+                    public void run() {
+
+                        ArrayList<Estudiante> estudiantes = this.msg.getData().getParcelableArrayList("estudiantes");
+                        /*ArrayList<String> estudiantes_nombres = new ArrayList<>();
+                        for (Estudiante e: estudiantes) {
+                            estudiantes_nombres.add(e.getNombres());
+                        }*/
+                        /*ArrayAdapter<String> student_adapter = new ArrayAdapter<String>(getApplicationContext(),
+                                android.R.layout.simple_list_item_1, estudiantes_nombres);
+                        dropdown_estudiantes.setAdapter(student_adapter);
+                        dropdown_estudiantes.setSelection(0);*/
+                       // mDilatingDotsProgressBar.hide();
+                        Intent i = new Intent(getApplicationContext(),ListaEstudiantes.class);
+                        i.putParcelableArrayListExtra("estudiantes",estudiantes);
+                        startActivity(i);
+                        finish();
+                    }
+                }.init(msg),100);// parametros necesarios
+
+                //si ha ocurrido un error del otro lado, se para la animacion, no se carga el listview y se muestra el mensaje de error.
+            }else if(estado =="error"){
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        /*ArrayAdapter<String> student_adapter = new ArrayAdapter<String>(getApplicationContext(),
+                                android.R.layout.simple_list_item_1, new ArrayList<String>());
+                        dropdown_estudiantes.setAdapter(student_adapter);
+                        mDilatingDotsProgressBar.hide();*/
+                        Toast.makeText(getApplicationContext(),"no se han encontrado estudiantes",Toast.LENGTH_SHORT).show();
+                    }
+                },100);
+            }
+        }
+    };
+
+
+    //click en boton submit de consultar.
+    public void consultarPersona(View view){
+        boolean checked = select_matricula.isChecked();
+        //inicializamos el hilo enviandole el objeto handler creado,
+        //Si estamos consultando por nombre y apellido.
+        if(!checked) {
+            HashMap parametros = new HashMap();
+            parametros.put("nombres",nombres.getText().toString());
+            parametros.put("apellidos",apellidos.getText().toString());
+
+            mapa_datos.put("soap_method","wsConsultarPersonaPorNombres");
+            mapa_datos.put("parametros",parametros);
+            soap = new ThreadSoap(this.manejador_hilo,mapa_datos); //seteamos los parametros del hilo
+            soap.start(); // damos run al hilo.
+
+/*            soap.setNombre_a_buscar(nombres.getText().toString());
+            soap.setApellido_a_buscar();
+            soap.setOpcion_escogida("wsConsultarPersonaPorNombres"); // ponemos el nombre del metodo*/
+            //soap.setOpcion_escogida("HelloWorld");
+            // el hilo solo se puede ejecutar una vez.
+
+        }else {/*Si se busca por matricula ---> agregar.*/
+            Toast.makeText(getApplicationContext(),"AUN NO SE HA IMPLEMENTADO",Toast.LENGTH_LONG);
+        }
+
+
+    }
+
+
+    //funcion que maneja el click en el checkbox para mostrar o no los widgets a mostrar.
+    public void onCheckBoxClick(View view){
+        boolean checked = ((CheckBox) view).isChecked();
+        //si esta seleccionada, mostramos solo el input de matricula caso contrario mostramos los 2 otros campos .
+        if(checked){
+            matricula.setVisibility(View.VISIBLE);
+            nombres.setVisibility(View.GONE);
+            apellidos.setVisibility(View.GONE);
+            nombres.setText("");
+            apellidos.setText("");
+            matricula.setText("");
+        }else{
+            matricula.setVisibility(View.GONE);
+            nombres.setVisibility(View.VISIBLE);
+            apellidos.setVisibility(View.VISIBLE);
+            nombres.setText("");
+            apellidos.setText("");
+            matricula.setText("");
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.items, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+}
