@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_estudiante"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:drawableRight="@drawable/arrow"
     android:orientation="horizontal"
     android:padding="@dimen/pad_10dp"
-    android:text="TextView"
+    android:text=""
     android:textColor="@color/main_color_gray_dk"
     android:textSize="@dimen/txt_18sp"
     android:drawableLeft="@drawable/ic_online"

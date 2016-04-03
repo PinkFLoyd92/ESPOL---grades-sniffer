@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,18 +26,21 @@ import com.fenonimous.polstalk.model.Estudiante;
 import Thread.ThreadSoap;
 
 public class BuscarEstudiante extends CustomActivity {
-    EditText nombres;
-    EditText apellidos;
-    EditText matricula;
-    CheckBox select_matricula;
-    Spinner dropdown_estudiantes;
-    DilatingDotsProgressBar mDilatingDotsProgressBar;
-    ThreadSoap soap; //objeto el cual recibe como parametro
 
+    private EditText nombres;
+    private EditText apellidos;
+    private EditText matricula;
+    private CheckBox select_matricula;
+    //Spinner dropdown_estudiantes;
+    DilatingDotsProgressBar mDilatingDotsProgressBar;
+    private ThreadSoap soap; //objeto el cual recibe como parametro
+    private static String resultado;
+    private static ArrayList<Estudiante> Estudiantes;
     /*Hashmap formado de la siguiente estructura:
     soap_method:String, parametros:<parametros enviados>
     Este diccionario es enviado al hilo para ahi decidir la funcion.*/
-    HashMap mapa_datos;
+    private HashMap mapa_datos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +50,21 @@ public class BuscarEstudiante extends CustomActivity {
 
     }
 
+    public static ArrayList<Estudiante> getEstudiantes() {
+        return Estudiantes;
+    }
+
+    public static void setEstudiantes(ArrayList<Estudiante> estudiantes) {
+        Estudiantes = estudiantes;
+    }
+
+    public static String getResultado() {
+        return resultado;
+    }
+
+    public static void setResultado(String result) {
+         resultado = result;
+    }
 
     public void inicializar_variables(){
         mapa_datos = new HashMap();
@@ -53,6 +72,7 @@ public class BuscarEstudiante extends CustomActivity {
         apellidos = (EditText)findViewById(R.id.apellido_estudiante);
         matricula = (EditText) findViewById(R.id.matricula_estudiante);
         select_matricula=(CheckBox)findViewById(R.id.select_matricula);
+        soap = new ThreadSoap();
     }
 
 
@@ -112,29 +132,48 @@ public class BuscarEstudiante extends CustomActivity {
     //click en boton submit de consultar.
     public void consultarPersona(View view){
         boolean checked = select_matricula.isChecked();
+        HashMap parametros;
+        resultado = "START";
         //inicializamos el hilo enviandole el objeto handler creado,
         //Si estamos consultando por nombre y apellido.
         if(!checked) {
-            HashMap parametros = new HashMap();
-            parametros.put("nombres",nombres.getText().toString());
-            parametros.put("apellidos",apellidos.getText().toString());
+            parametros = new HashMap();
+            parametros.put("nombres",nombres.getText().toString().trim() );
+            parametros.put("apellidos",apellidos.getText().toString().trim() );
 
             mapa_datos.put("soap_method","wsConsultarPersonaPorNombres");
-            mapa_datos.put("parametros",parametros);
-            soap = new ThreadSoap(this.manejador_hilo,mapa_datos); //seteamos los parametros del hilo
+            mapa_datos.put("parametros", parametros);
+            soap.setHandler(this.manejador_hilo);
+            soap.setMapa_datos(mapa_datos);
             soap.start(); // damos run al hilo.
-
-/*            soap.setNombre_a_buscar(nombres.getText().toString());
-            soap.setApellido_a_buscar();
-            soap.setOpcion_escogida("wsConsultarPersonaPorNombres"); // ponemos el nombre del metodo*/
-            //soap.setOpcion_escogida("HelloWorld");
-            // el hilo solo se puede ejecutar una vez.
-
-        }else {/*Si se busca por matricula ---> agregar.*/
-            Toast.makeText(getApplicationContext(),"AUN NO SE HA IMPLEMENTADO",Toast.LENGTH_LONG);
+            while (resultado == "START") {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else {/*Si se busca por matricula ---> agregar.*/            //Toast.makeText(getApplicationContext(),"AUN NO SE HA IMPLEMENTADO",Toast.LENGTH_LONG);
+            parametros = new HashMap();
+            parametros.put("matricula", matricula.getText().toString().trim() );
+            mapa_datos.put("soap_method","wsInfoEstudiante");
+            mapa_datos.put("parametros",parametros);
+            soap.setHandler(this.manejador_hilo);
+            soap.setMapa_datos(mapa_datos);
+            soap.start();
+            while (resultado == "START") {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-
-
+        Intent intent_lista_estudiante = new Intent(this , ListaEstudiantes.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("estudiantes",Estudiantes);
+        intent_lista_estudiante.putExtras(bundle);
+        startActivity(intent_lista_estudiante);
     }
 
 

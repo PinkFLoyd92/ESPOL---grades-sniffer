@@ -14,6 +14,8 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.fenonimous.polstalk.BuscarEstudiante;
 import com.fenonimous.polstalk.model.Estudiante;
 import com.fenonimous.polstalk.model.SoapService;
 
@@ -22,18 +24,36 @@ import com.fenonimous.polstalk.model.SoapService;
  */
 
 public class ThreadSoap extends Thread{
-    //constructor
-    public ThreadSoap(Handler handler, HashMap mapa_datos) {
-            this.handler = handler;
-            this.mapa_datos = mapa_datos;
-            this.soapService = new SoapService();
-    }
     private SoapService soapService;
     private HashMap mapa_datos;
     private Handler handler;
     private static final String NAMESPACE ="http://tempuri.org/";
     private static final String URL = "https://ws.espol.edu.ec/saac/wsandroid.asmx";
     private String webResponse;
+
+    //constructor
+    public ThreadSoap(Handler handler, HashMap mapa_datos) {
+            this.handler = handler;
+            this.mapa_datos = mapa_datos;
+            this.soapService = new SoapService();
+    }
+    public ThreadSoap(){ this.soapService = new SoapService(); }
+
+    public HashMap getMapa_datos() {
+        return mapa_datos;
+    }
+
+    public void setMapa_datos(HashMap mapa_datos) {
+        this.mapa_datos = mapa_datos;
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
 
     public String getWebResponse() {
         return webResponse;
@@ -52,18 +72,57 @@ public class ThreadSoap extends Thread{
 
     //funcion la cual recibe el soap_method enviado desde el UI la cual llama al metodo soap apropiado.
     public void run_option(String metodo_escogido){
+        ArrayList<Estudiante> estudiantes = new ArrayList<>();
         switch(metodo_escogido){
             case "HelloWorld":{/*TEST*/
                 call_hello_world();
                 break;
             }
             case "wsConsultarPersonaPorNombres":{
-                call_wsConsultarPersonaPorNombres();
+                estudiantes = call_wsConsultarPersonaPorNombres();
+                BuscarEstudiante.setEstudiantes(estudiantes);
+                BuscarEstudiante.setResultado("CANCEL");
+                break;
+            }
+            case "wsInfoEstudiante":{
+                Estudiante estudiante = call_wsInfoEstudiante();
+                estudiantes.add(estudiante);
+                BuscarEstudiante.setEstudiantes(estudiantes);
+                BuscarEstudiante.setResultado("CANCEL");
                 break;
             }
             default:
-                break;
+            break;
         }
+    }
+    /*
+    * @description: Esta funcion se encarga de buscar la informacion del estudiante cuando se ingresa el
+    * numero de matricula
+    */
+    private Estudiante call_wsInfoEstudiante(){
+        Estudiante estudiante = null;
+        try {
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            //se muestra en el hilo principal(UI) algo indicando que se esta procesando la solicitud..
+            b.putString("estado_hilo", "procesando");
+            msg.setData(b);
+            handler.handleMessage(msg);
+            //se obtiene el estudiante.
+            estudiante = this.soapService.call_wsInfoEstudiante((String) ((HashMap) mapa_datos.get("parametros")).get("matricula"));
+            b.clear();
+            b.putParcelable("matricula_estudiante", estudiante);
+            msg.setData(b);
+            handler.handleMessage(msg);
+        }catch (Exception e){
+            e.printStackTrace();
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            b.putString("estado", "error");
+            msg.setData(b);
+            handler.handleMessage(msg);
+        }
+        return estudiante;
     }
 
     private void call_hello_world() {
@@ -78,12 +137,17 @@ public class ThreadSoap extends Thread{
             Log.d("test", response.toString()); // debe salir hello world
         } catch (Exception e) {
             e.printStackTrace();
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            b.putString("estado", "error");
+            msg.setData(b);
+            handler.handleMessage(msg);
         }
     }
 
     //public ArrayList<String> get_students_by_name(String nombre, String apellido){
-    public void call_wsConsultarPersonaPorNombres() {
-        ArrayList<Estudiante> estudiantes = new ArrayList<>();
+    private ArrayList<Estudiante> call_wsConsultarPersonaPorNombres() {
+        ArrayList<Estudiante> estudiantes = null;
         this.webResponse = "";
         try {
             Message msg = this.handler.obtainMessage();
@@ -112,6 +176,7 @@ public class ThreadSoap extends Thread{
             handler.handleMessage(msg);
 
         }
+        return estudiantes;
     }
 
 }

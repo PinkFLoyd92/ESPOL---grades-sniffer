@@ -11,34 +11,22 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/pad_20dp"
-        android:paddingLeft="@dimen/pad_15dp"
-        android:paddingRight="@dimen/pad_15dp"
-        android:paddingTop="@dimen/pad_20dp"
+
         android:weightSum="1">
 
         <EditText
             android:id="@+id/nombre_estudiante"
             style="@style/editext_graybg"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:drawableLeft="@drawable/ic_username"
             android:hint="@string/nombre"
-            android:editable="true">
+            android:editable="true"
+            android:layout_marginTop="20dp">
 
             <requestFocus />
         </EditText>
-        <EditText
-            android:id="@+id/apellido_estudiante"
-            style="@style/editext_graybg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_username"
-            android:hint="@string/apellido"
-            android:layout_marginTop="40dp">
 
-            <requestFocus />
-        </EditText>
         <EditText
             android:id="@+id/matricula_estudiante"
             style="@style/editext_graybg"
@@ -46,6 +34,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_play_light"
             android:hint="@string/matricula_input"
+            android:layout_marginTop="20dp"
             android:visibility="gone">
 
             <requestFocus />
@@ -59,23 +48,35 @@
 
         </LinearLayout>
 
+        <EditText
+            android:id="@+id/apellido_estudiante"
+            style="@style/editext_graybg"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:drawableLeft="@drawable/ic_username"
+            android:hint="@string/apellido"
+            android:layout_marginTop="40dp">
+
+            <requestFocus />
+        </EditText>
+
         <CheckBox
             android:layout_width="289dp"
-            android:layout_height="82dp"
+            android:layout_height="60dp"
             android:text="@string/matricula"
             android:id="@+id/select_matricula"
             android:checked="false"
             android:onClick="onCheckBoxClick"
-            android:layout_marginTop="40dp" />
+            android:layout_marginTop="20dp" />
 
         <Button
             android:id="@+id/btnLogin"
             style="@style/btn_white_large"
             android:layout_width="wrap_content"
-            android:layout_height="72dp"
+            android:layout_height="60dp"
             android:text="@string/buscar_estudiante"
             android:onClick="consultarPersona"
-            android:layout_marginTop="40dp" />
+            android:layout_marginTop="20dp" />
     </LinearLayout>
 
 </ScrollView>
