@@ -81,6 +81,7 @@ public class ThreadSoap extends Thread{
             case "wsConsultarPersonaPorNombres":{
                 estudiantes = call_wsConsultarPersonaPorNombres();
                 BuscarEstudiante.setEstudiantes(estudiantes);
+                /*En la clase BuscarEstudiante, al atributo estatico "resultado" le seteo el valor a "CANCEL" para que salga del while y se pueda crear la nueva actividad*/
                 BuscarEstudiante.setResultado("CANCEL");
                 break;
             }
@@ -88,6 +89,7 @@ public class ThreadSoap extends Thread{
                 Estudiante estudiante = call_wsInfoEstudiante();
                 estudiantes.add(estudiante);
                 BuscarEstudiante.setEstudiantes(estudiantes);
+                /*En la clase BuscarEstudiante, al atributo estatico "resultado" le seteo el valor a "CANCEL" para que salga del while y se pueda crear la nueva actividad*/
                 BuscarEstudiante.setResultado("CANCEL");
                 break;
             }

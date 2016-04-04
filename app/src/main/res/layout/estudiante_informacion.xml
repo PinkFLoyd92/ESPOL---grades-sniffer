@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.fenonimous.polstalk.EstudianteInformacion"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/pad_20dp"
+        android:paddingLeft="@dimen/pad_15dp"
+        android:paddingRight="@dimen/pad_15dp"
+        android:paddingTop="@dimen/pad_20dp"
+        android:weightSum="1">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@drawable/ic_username" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="310dp"
+            android:id="@+id/listaInformacionEstudiante"
+            tools:listitem="@layout/estudiante_detalle"
+            android:fastScrollEnabled="false"
+            android:layout_weight="0.12" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="62dp"
+                android:text="@string/ver_notas"
+                android:id="@+id/btn_ver_notas"
+                style="@style/btn_white_large"
+                android:textSize="@dimen/txt_20sp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

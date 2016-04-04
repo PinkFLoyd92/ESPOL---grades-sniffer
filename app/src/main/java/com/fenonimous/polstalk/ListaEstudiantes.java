@@ -26,7 +26,7 @@ import java.util.List;
  * The Class ListaEstudiantes is the Activity class. It shows a list of all users of
  * this app. It also shows the Offline/Online status of users.
  */
-public class ListaEstudiantes extends CustomActivity
+public class ListaEstudiantes extends CustomActivity implements AdapterView.OnItemClickListener
 {
 	private ListView listView;
     private ArrayList<Estudiante> Estudiantes;
@@ -39,7 +39,8 @@ public class ListaEstudiantes extends CustomActivity
 		listView = (ListView)findViewById(R.id.listaEstudiante);
         Bundle bundle = getIntent().getExtras();
         Estudiantes = bundle.getParcelableArrayList("estudiantes");
-        this.listView.setAdapter(new StudentAdapter(this, R.id.listaEstudiante,Estudiantes));
+        this.listView.setAdapter(new StudentAdapter(this, R.id.listaEstudiante, Estudiantes));
+        this.listView.setOnItemClickListener(this);
 	}
 
 	/* (non-Javadoc)
@@ -50,17 +51,25 @@ public class ListaEstudiantes extends CustomActivity
 	{
 		super.onDestroy();
 	}
+    /*@Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+    }
 
-	/**
-	 * Cargar lista de estudiantes
-	 */
-	private void loadStudentsList()
-	{
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
-	}
+    }*/
 
-	/**
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent estudiante_informacion_intent = new Intent(getApplicationContext(), EstudianteInformacion.class);
+        Estudiante estudiante = Estudiantes.get(position);
+        estudiante_informacion_intent.putExtra("informacion_estudiante", estudiante);
+        startActivity(estudiante_informacion_intent);
+    }
+
+    /**
 	 * Clase adaptadora que maneja los elementos que se tienen en
 	 * el listview de estudiantes.
 	 */

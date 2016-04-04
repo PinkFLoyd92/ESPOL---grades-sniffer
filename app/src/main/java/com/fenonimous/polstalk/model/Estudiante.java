@@ -115,4 +115,35 @@ public class Estudiante implements Parcelable {
         this.apellidos = apellidos;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNombre_completo() {
+        return nombre_completo;
+    }
+
+    public void setNombre_completo(String nombre_completo) {
+        this.nombre_completo = nombre_completo;
+    }
+
+    public float getPromedio_general() {
+        return promedio_general;
+    }
+
+    public void setPromedio_general(float promedio_general) {
+        this.promedio_general = promedio_general;
+    }
+
+    public int getFactor_p() {
+        return factor_p;
+    }
+
+    public void setFactor_p(int factor_p) {
+        this.factor_p = factor_p;
+    }
 }

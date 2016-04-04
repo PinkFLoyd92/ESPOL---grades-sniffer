@@ -169,8 +169,10 @@ public class BuscarEstudiante extends CustomActivity {
                 }
             }
         }
+        /*A partir de esta linea se instancia una nueva actividad que es lista_estudiante*/
         Intent intent_lista_estudiante = new Intent(this , ListaEstudiantes.class);
         Bundle bundle = new Bundle();
+        /*A la nueva actividad voy a enviar como parametro el Arreglo de estudiantes*/
         bundle.putParcelableArrayList("estudiantes",Estudiantes);
         intent_lista_estudiante.putExtras(bundle);
         startActivity(intent_lista_estudiante);
