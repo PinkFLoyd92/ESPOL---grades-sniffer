@@ -97,4 +97,71 @@ public class SoapService {
         }
         return "";
     }
+
+    public ArrayList<Materia> call_wsConsultaCalificaciones(String anio, String termino,String estudiante){
+        ArrayList<Materia> materias = new ArrayList<>();
+        String webResponse= "";
+        SoapObject request = new SoapObject(NAMESPACE, "wsConsultaCalificaciones");
+        PropertyInfo anio_send =new PropertyInfo();
+        anio_send.setName("anio");
+        anio_send.setValue(anio);
+        anio_send.setType(String.class);
+        request.addProperty(anio_send);
+
+        PropertyInfo termino_send=new PropertyInfo();
+        termino_send.setName("termino");
+        termino_send.setValue(termino);
+        termino_send.setType(String.class);
+        request.addProperty(termino_send);
+
+        PropertyInfo estudiante_send=new PropertyInfo();
+        estudiante_send.setName("estudiante");
+        estudiante_send.setValue(estudiante);
+        estudiante_send.setType(String.class);
+        request.addProperty(estudiante_send);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+        androidHttpTransport.debug = true;
+        try {
+            androidHttpTransport.call("http://tempuri.org/wsConsultaCalificaciones", envelope);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (XmlPullParserException e1) {
+            e1.printStackTrace();
+        }
+
+        SoapObject response = null;
+
+        try {
+            response = (SoapObject) envelope.getResponse();
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+
+        SoapObject root = (SoapObject) response.getProperty(1);
+        SoapObject datos_root2 = (SoapObject) root.getProperty("NewDataSet");
+        //Log.d("test_materias",datos_root2.toString());
+        SoapObject calificaciones = new SoapObject();
+        for (int i= 0; i<datos_root2.getPropertyCount();i++){
+            try {
+                calificaciones = (SoapObject) datos_root2.getProperty(i);
+                //  Log.d("test_materias",calificaciones.toString());
+                String nombre = calificaciones.getProperty("MATERIA").toString();
+                int nota1 = Integer.parseInt(calificaciones.getProperty("NOTA1").toString());
+                int nota2 = Integer.parseInt(calificaciones.getProperty("NOTA2").toString());
+                int nota3 = Integer.parseInt(calificaciones.getProperty("NOTA3").toString());
+                int vez_tomada = Integer.parseInt(calificaciones.getProperty("VEZ").toString());
+                String estado = calificaciones.getProperty("ESTADO").toString();
+                Materia temp_materia;
+                temp_materia = new Materia(nombre, estado, vez_tomada, nota1, nota2, nota3);
+                materias.add(temp_materia);
+            }catch (RuntimeException e){
+                Log.d("fail", "fail");
+            }
+        }
+        return materias;
+    }
 }

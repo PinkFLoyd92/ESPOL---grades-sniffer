@@ -4,7 +4,7 @@
     <string name="matricula">Buscar por matrícula</string>
     <string name="matricula_input">Num. de matrícula</string>
     <string name="type_msg">Type message</string>
-
+<string name="buscar_notas">Buscar notas</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 

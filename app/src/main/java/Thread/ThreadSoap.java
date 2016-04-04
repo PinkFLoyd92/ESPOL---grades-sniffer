@@ -15,6 +15,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import java.util.ArrayList;
 import java.util.HashMap;
 import com.fenonimous.polstalk.model.Estudiante;
+import com.fenonimous.polstalk.model.Materia;
 import com.fenonimous.polstalk.model.SoapService;
 
 /**
@@ -61,6 +62,10 @@ public class ThreadSoap extends Thread{
                 call_wsConsultarPersonaPorNombres();
                 break;
             }
+            case "wsConsultaCalificaciones":{
+                call_wsConsultaCalificaciones();
+                break;
+            }
             default:
                 break;
         }
@@ -98,7 +103,37 @@ public class ThreadSoap extends Thread{
 
             b.clear();
             b.putString("estado_hilo","finalizado");
-            b.putParcelableArrayList("estudiantes",estudiantes);
+            b.putParcelableArrayList("estudiantes", estudiantes);
+            msg.setData(b);
+            handler.handleMessage(msg);
+
+            //si se entra en la excepcion enviamos un estado de error al ui y no cargamos la actividad del listview.
+        } catch (Exception e) {//RUNTIME EXCEPTION,IOEXCEPTION
+            e.printStackTrace();
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            b.putString("estado", "error");
+            msg.setData(b);
+            handler.handleMessage(msg);
+
+        }
+    }
+    private void call_wsConsultaCalificaciones(){
+        ArrayList<Materia> materias = new ArrayList<>();
+        this.webResponse = "";
+        try {
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            //se muestra en el hilo principal(UI) algo indicando que se esta procesando la solicitud..
+            b.putString("wsConsultaCalificaciones", "procesando");
+            msg.setData(b);
+            handler.handleMessage(msg);
+            //se obtienen las materias
+            materias = this.soapService.call_wsConsultaCalificaciones((String) ((HashMap) mapa_datos.get("parametros")).get("anio"),
+                    (String) ((HashMap) mapa_datos.get("parametros")).get("termino"), (String) ((HashMap) mapa_datos.get("parametros")).get("estudiante"));
+            b.clear();
+            b.putString("wsConsultaCalificaciones","finalizado");
+            b.putParcelableArrayList("materias", materias);
             msg.setData(b);
             handler.handleMessage(msg);
 
