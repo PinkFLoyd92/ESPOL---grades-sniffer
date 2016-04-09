@@ -21,9 +21,11 @@ public class Materia implements Parcelable{
 
     }
     protected Materia(Parcel in) {
+        nota= in.readParcelable(Nota.class.getClassLoader());
         vez_tomada = in.readInt();
         estado = in.readString();
-        nota= in.readParcelable(Nota.class.getClassLoader());
+        nombre = in.readString();
+
     }
     public String getEstado() {
         return estado;
@@ -77,8 +79,10 @@ public class Materia implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(nota, flags);
         dest.writeInt(vez_tomada);
         dest.writeString(estado);
-        dest.writeParcelable(nota,flags);
+        dest.writeString(nombre);
+
     }
 }

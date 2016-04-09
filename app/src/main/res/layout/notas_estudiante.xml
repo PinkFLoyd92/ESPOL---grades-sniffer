@@ -20,46 +20,38 @@
         <EditText
             android:id="@+id/nombre_estudiante"
             style="@style/editext_graybg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="265dp"
+            android:layout_height="62dp"
             android:drawableLeft="@drawable/ic_username"
             android:hint="@string/username"
             android:editable="false">
 
         </EditText>
 
-        <TextView
-            style="@style/editext_graybg"
-            android:text="Año"
-            android:layout_width="104dp"
-            android:layout_height="49dp"
-            android:id="@+id/text_"
-            android:layout_marginRight="125dp"
-            android:layout_marginTop="30dp" />
-
         <EditText
-            android:layout_width="191dp"
-            android:layout_height="wrap_content"
+            style="@style/editext_graybg"
+            android:layout_width="109dp"
+            android:layout_height="37dp"
             android:inputType="numberSigned"
             android:ems="10"
             android:id="@+id/select_anio"
             android:hint="Año"
-            android:layout_marginRight="80dp" />
+            android:layout_margin="5dp" />
 
         <TextView
             style="@style/editext_graybg"
             android:layout_width="211dp"
             android:layout_height="49dp"
             android:text="Término"
-            android:id="@+id/textView"
-            android:layout_marginRight="80dp"
-            android:layout_marginTop="30dp" />
+            android:id="@+id/text_termino"
+             />
 
         <Spinner
             style="btn_green_white_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/select_termino" />
+            android:id="@+id/select_termino"
+            android:layout_margin="5dp" />
         <LinearLayout
             android:id="@+id/main"
             android:layout_width="wrap_content"
@@ -69,13 +61,6 @@
 
         </LinearLayout>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.79"
-            android:visibility="gone"></TableRow>
-
-
         <Button
             android:id="@+id/btnBuscarNotas"
             style="@style/btn_white_large"
@@ -83,7 +68,7 @@
             android:layout_height="72dp"
             android:text="@string/buscar_notas"
             android:onClick="consultarPersona"
-            android:layout_marginTop="300dp" />
+            android:layout_margin="5dp" />
     </LinearLayout>
 
 </ScrollView>

@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -31,7 +33,6 @@ public class NotasEstudiante extends CustomActivity
     private EditText select_anio;
     private TextView text_termino;
     private Spinner select_termino;
-    private TableRow tabla_notas;
     private Button btnBuscarNotas;
     private  ThreadSoap soap;
     private HashMap mapa_datos;
@@ -42,6 +43,14 @@ public class NotasEstudiante extends CustomActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notas_estudiante);
         inicializar_variables();
+        List<String> spinnerArray =  new ArrayList<String>();
+        spinnerArray.add("1");
+        spinnerArray.add("2");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                select_termino.setAdapter(adapter);
+
     }
 
     /* (non-Javadoc)
@@ -55,19 +64,18 @@ public class NotasEstudiante extends CustomActivity
 
     private void inicializar_variables(){
         nombre_estudiante = (EditText)findViewById(R.id.nombre_estudiante);
-        text_anio = (TextView)findViewById(R.id.text_anio);
+        //text_anio = (TextView)findViewById(R.id.text_anio);
         select_anio = (EditText)findViewById(R.id.select_anio);
         text_termino = (TextView)findViewById(R.id.text_termino);
         select_termino= (Spinner)findViewById(R.id.select_termino);
-        tabla_notas = (TableRow)findViewById(R.id.tabla_notas);
         btnBuscarNotas = (Button)findViewById(R.id.btnBuscarNotas);
         mapa_datos = new HashMap();
     }
 
     public void consultarPersona(View view){
         HashMap parametros = new HashMap();
-        parametros.put("anio","2015");
-        parametros.put("termino","2");
+        parametros.put("anio",select_anio.getText().toString());
+        parametros.put("termino",select_termino.getSelectedItem().toString());
         parametros.put("estudiante","201020518");
         mapa_datos.put("soap_method","wsConsultaCalificaciones");
         mapa_datos.put("parametros",parametros);
@@ -104,7 +112,10 @@ public class NotasEstudiante extends CustomActivity
 
                         ArrayList<Materia> materias = this.msg.getData().getParcelableArrayList("materias");
 
-                        Toast.makeText(getApplicationContext(),"Se obtuvieron las materias, falta mostrarlos",Toast.LENGTH_LONG);
+
+                        Intent i = new Intent(getApplicationContext(), TablaNotasEstudiante.class);
+                        i.putParcelableArrayListExtra("materias",materias);
+                        startActivity(i);
                     }
                 }.init(msg),100);// parametros necesarios
 
