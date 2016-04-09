@@ -14,6 +14,8 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.fenonimous.polstalk.BuscarEstudiante;
 import com.fenonimous.polstalk.model.Estudiante;
 import com.fenonimous.polstalk.model.Materia;
 import com.fenonimous.polstalk.model.SoapService;
@@ -23,18 +25,36 @@ import com.fenonimous.polstalk.model.SoapService;
  */
 
 public class ThreadSoap extends Thread{
-    //constructor
-    public ThreadSoap(Handler handler, HashMap mapa_datos) {
-            this.handler = handler;
-            this.mapa_datos = mapa_datos;
-            this.soapService = new SoapService();
-    }
     private SoapService soapService;
     private HashMap mapa_datos;
     private Handler handler;
     private static final String NAMESPACE ="http://tempuri.org/";
     private static final String URL = "https://ws.espol.edu.ec/saac/wsandroid.asmx";
     private String webResponse;
+
+    //constructor
+    public ThreadSoap(Handler handler, HashMap mapa_datos) {
+            this.handler = handler;
+            this.mapa_datos = mapa_datos;
+            this.soapService = new SoapService();
+    }
+    public ThreadSoap(){ this.soapService = new SoapService(); }
+
+    public HashMap getMapa_datos() {
+        return mapa_datos;
+    }
+
+    public void setMapa_datos(HashMap mapa_datos) {
+        this.mapa_datos = mapa_datos;
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
 
     public String getWebResponse() {
         return webResponse;
@@ -66,9 +86,45 @@ public class ThreadSoap extends Thread{
                 call_wsConsultaCalificaciones();
                 break;
             }
-            default:
+
+            case "wsInfoEstudiante":{
+                call_wsInfoEstudiante();
                 break;
+            }
+            default:
+            break;
         }
+    }
+    /*
+    * @description: Esta funcion se encarga de buscar la informacion del estudiante cuando se ingresa el
+    * numero de matricula
+    */
+    private Estudiante call_wsInfoEstudiante(){
+        Estudiante estudiante = null;
+        try {
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            //se muestra en el hilo principal(UI) algo indicando que se esta procesando la solicitud..
+            b.putString("wsInfoEstudiante", "procesando");
+            msg.setData(b);
+            handler.handleMessage(msg);
+            b.clear();
+            //se obtiene el estudiante.
+            estudiante = this.soapService.call_wsInfoEstudiante((String) ((HashMap) mapa_datos.get("parametros")).get("matricula"));
+
+            b.putParcelable("matricula_estudiante", estudiante);
+            b.putString("wsInfoEstudiante", "finalizado");
+            msg.setData(b);
+            handler.handleMessage(msg);
+        }catch (Exception e){
+            e.printStackTrace();
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            b.putString("wsInfoEstudiante", "error");
+            msg.setData(b);
+            handler.handleMessage(msg);
+        }
+        return estudiante;
     }
 
     private void call_hello_world() {
@@ -83,18 +139,23 @@ public class ThreadSoap extends Thread{
             Log.d("test", response.toString()); // debe salir hello world
         } catch (Exception e) {
             e.printStackTrace();
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            b.putString("estado", "error");
+            msg.setData(b);
+            handler.handleMessage(msg);
         }
     }
 
     //public ArrayList<String> get_students_by_name(String nombre, String apellido){
-    public void call_wsConsultarPersonaPorNombres() {
-        ArrayList<Estudiante> estudiantes = new ArrayList<>();
+    private void call_wsConsultarPersonaPorNombres() {
+        ArrayList<Estudiante> estudiantes = null;
         this.webResponse = "";
         try {
             Message msg = this.handler.obtainMessage();
             Bundle b = new Bundle();
             //se muestra en el hilo principal(UI) algo indicando que se esta procesando la solicitud..
-            b.putString("estado_hilo", "procesando");
+            b.putString("wsConsultarPersonaPorNombres", "procesando");
             msg.setData(b);
             handler.handleMessage(msg);
             //se obtienen los estudiantes.
@@ -102,7 +163,7 @@ public class ThreadSoap extends Thread{
                     (String) ((HashMap) mapa_datos.get("parametros")).get("apellidos"));
 
             b.clear();
-            b.putString("estado_hilo","finalizado");
+            b.putString("wsConsultarPersonaPorNombres","finalizado");
             b.putParcelableArrayList("estudiantes", estudiantes);
             msg.setData(b);
             handler.handleMessage(msg);
@@ -112,7 +173,7 @@ public class ThreadSoap extends Thread{
             e.printStackTrace();
             Message msg = this.handler.obtainMessage();
             Bundle b = new Bundle();
-            b.putString("estado", "error");
+            b.putString("wsConsultarPersonaPorNombres", "error");
             msg.setData(b);
             handler.handleMessage(msg);
 
@@ -142,7 +203,7 @@ public class ThreadSoap extends Thread{
             e.printStackTrace();
             Message msg = this.handler.obtainMessage();
             Bundle b = new Bundle();
-            b.putString("estado", "error");
+            b.putString("wsConsultaCalificaciones", "error");
             msg.setData(b);
             handler.handleMessage(msg);
 

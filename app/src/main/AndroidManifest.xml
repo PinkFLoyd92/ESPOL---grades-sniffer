@@ -11,19 +11,35 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
         <activity android:name=".NotasEstudiante"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
+            </activity>
+
+        <activity
+            android:name=".BuscarEstudiante"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".TablaNotasEstudiante">
         </activity>
+
+        <activity
+            android:name=".ListaEstudiantes"
+            android:label="@string/listaEstudiante"
+            android:screenOrientation="portrait"></activity>
+
+        <activity android:name=".EstudianteInformacion"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

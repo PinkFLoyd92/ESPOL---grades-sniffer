@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,18 +26,19 @@ import com.fenonimous.polstalk.model.Estudiante;
 import Thread.ThreadSoap;
 
 public class BuscarEstudiante extends CustomActivity {
-    EditText nombres;
-    EditText apellidos;
-    EditText matricula;
-    CheckBox select_matricula;
-    Spinner dropdown_estudiantes;
-    DilatingDotsProgressBar mDilatingDotsProgressBar;
-    ThreadSoap soap; //objeto el cual recibe como parametro
 
+    private EditText nombres;
+    private EditText apellidos;
+    private EditText matricula;
+    private CheckBox select_matricula;
+    //Spinner dropdown_estudiantes;
+    DilatingDotsProgressBar mDilatingDotsProgressBar;
+    private ThreadSoap soap; //objeto el cual recibe como parametro
     /*Hashmap formado de la siguiente estructura:
     soap_method:String, parametros:<parametros enviados>
     Este diccionario es enviado al hilo para ahi decidir la funcion.*/
-    HashMap mapa_datos;
+    private HashMap mapa_datos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +47,6 @@ public class BuscarEstudiante extends CustomActivity {
 
 
     }
-
 
     public void inicializar_variables(){
         mapa_datos = new HashMap();
@@ -60,13 +61,14 @@ public class BuscarEstudiante extends CustomActivity {
     final Handler manejador_hilo = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            String estado = msg.getData().getString("estado_hilo");
+            String estado = msg.getData().getString("wsConsultarPersonaPorNombres");
+            /*aqui se agrega la animacion.*/
             if(estado == "procesando"){
 
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //mDilatingDotsProgressBar.showNow();
+                        Toast.makeText(getApplicationContext(),"SE ESTA PROCESANDO",Toast.LENGTH_SHORT).show();
                     }
                 }, 100);
             //si se finaliza el proceso y  ha sido procesada correctamente la solicitud:
@@ -81,11 +83,10 @@ public class BuscarEstudiante extends CustomActivity {
                     @Override
                     //iniciamos la nueva actividad en esta parte.
                     public void run() {
-
                         ArrayList<Estudiante> estudiantes = this.msg.getData().getParcelableArrayList("estudiantes");
                         Intent i = new Intent(getApplicationContext(),ListaEstudiantes.class);
                         i.putParcelableArrayListExtra("estudiantes",estudiantes);
-                       // startActivity(i);
+                        startActivity(i);
                         //finish();
                         Toast.makeText(getApplicationContext(),"Se obtuvieron los estudiantes, falta mostrarlos",Toast.LENGTH_LONG);
                     }
@@ -112,28 +113,34 @@ public class BuscarEstudiante extends CustomActivity {
     //click en boton submit de consultar.
     public void consultarPersona(View view){
         boolean checked = select_matricula.isChecked();
+        HashMap parametros;
         //inicializamos el hilo enviandole el objeto handler creado,
         //Si estamos consultando por nombre y apellido.
         if(!checked) {
-            HashMap parametros = new HashMap();
-            parametros.put("nombres",nombres.getText().toString());
-            parametros.put("apellidos",apellidos.getText().toString());
+            parametros = new HashMap();
+            parametros.put("nombres",nombres.getText().toString().trim() );
+            parametros.put("apellidos",apellidos.getText().toString().trim() );
 
             mapa_datos.put("soap_method","wsConsultarPersonaPorNombres");
-            mapa_datos.put("parametros",parametros);
-            soap = new ThreadSoap(this.manejador_hilo,mapa_datos); //seteamos los parametros del hilo
+            mapa_datos.put("parametros", parametros);
+            soap = new ThreadSoap(this.manejador_hilo,mapa_datos);
             soap.start(); // damos run al hilo.
-
-/*            soap.setNombre_a_buscar(nombres.getText().toString());
-            soap.setApellido_a_buscar();
-            soap.setOpcion_escogida("wsConsultarPersonaPorNombres"); // ponemos el nombre del metodo*/
-            //soap.setOpcion_escogida("HelloWorld");
-            // el hilo solo se puede ejecutar una vez.
-
-        }else {/*Si se busca por matricula ---> agregar.*/
-            Toast.makeText(getApplicationContext(),"AUN NO SE HA IMPLEMENTADO",Toast.LENGTH_LONG);
+        }else {/*Si se busca por matricula ---> agregar.*/            //Toast.makeText(getApplicationContext(),"AUN NO SE HA IMPLEMENTADO",Toast.LENGTH_LONG);
+            parametros = new HashMap();
+            parametros.put("matricula", matricula.getText().toString().trim() );
+            mapa_datos.put("soap_method","wsInfoEstudiante");
+            mapa_datos.put("parametros",parametros);
+            soap.setHandler(this.manejador_hilo);
+            soap.setMapa_datos(mapa_datos);
+            soap.start();
+            /*while (resultado == "START") {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }*/
         }
-
 
     }
 

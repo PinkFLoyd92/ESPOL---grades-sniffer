@@ -1,16 +1,21 @@
 <resources>
-<string name="buscar_estudiante">Buscar estudiante</string>
+    <string name="buscar_estudiante">Buscar estudiante</string>
     <string name="apellido">Apellido</string>
     <string name="matricula">Buscar por matrícula</string>
     <string name="matricula_input">Num. de matrícula</string>
     <string name="type_msg">Type message</string>
+    <string name="username">Matricula</string>
 <string name="buscar_notas">Buscar notas</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-
+    <string name="listaEstudiante">listaEstudiante</string>
+    <string name="ver_notas">Ver notas</string>
     <string name="or">or</string>
-    <string name="email">Email</string>
-    <string name="username">Nombres</string>
+    <string name="email">Email:</string>
+    <string name="nombre">Nombres</string>
+    <string name="carrera">Carrera</string>
+    <string name="factorp">Factor p:</string>
+    <string name="promedio_general">Promedio general:</string>
     <string name="password">Password</string>
     <string name="register">Register</string>
     <string name="log_in">Log in</string>

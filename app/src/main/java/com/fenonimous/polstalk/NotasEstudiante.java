@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fenonimous.polstalk.custom.CustomActivity;
+import com.fenonimous.polstalk.model.Estudiante;
 import com.fenonimous.polstalk.model.Materia;
 import Thread.ThreadSoap;
 
@@ -36,12 +37,15 @@ public class NotasEstudiante extends CustomActivity
     private Button btnBuscarNotas;
     private  ThreadSoap soap;
     private HashMap mapa_datos;
+    private Estudiante estudiante;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notas_estudiante);
+
+
         inicializar_variables();
         List<String> spinnerArray =  new ArrayList<String>();
         spinnerArray.add("1");
@@ -63,6 +67,7 @@ public class NotasEstudiante extends CustomActivity
     }
 
     private void inicializar_variables(){
+        estudiante = getIntent().getParcelableExtra("estudiante");
         nombre_estudiante = (EditText)findViewById(R.id.nombre_estudiante);
         //text_anio = (TextView)findViewById(R.id.text_anio);
         select_anio = (EditText)findViewById(R.id.select_anio);
@@ -70,13 +75,15 @@ public class NotasEstudiante extends CustomActivity
         select_termino= (Spinner)findViewById(R.id.select_termino);
         btnBuscarNotas = (Button)findViewById(R.id.btnBuscarNotas);
         mapa_datos = new HashMap();
+
+        nombre_estudiante.setText(estudiante.getNombre_completo());
     }
 
     public void consultarPersona(View view){
         HashMap parametros = new HashMap();
         parametros.put("anio",select_anio.getText().toString());
         parametros.put("termino",select_termino.getSelectedItem().toString());
-        parametros.put("estudiante","201020518");
+        parametros.put("estudiante",estudiante.getCodigo_estudiante());
         mapa_datos.put("soap_method","wsConsultaCalificaciones");
         mapa_datos.put("parametros",parametros);
         soap = new ThreadSoap(this.manejador_hilo,mapa_datos); //seteamos los parametros del hilo
