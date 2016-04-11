@@ -41,7 +41,7 @@ public class EstudianteInformacion extends CustomActivity {
         btn_notas = (Button)findViewById(R.id.btn_ver_notas);
 
         informacion_estudiante.add( new Pair<String, String>("Nombres", estudiante.getNombres() + estudiante.getApellidos()) );
-        informacion_estudiante.add( new Pair<String, String>("Email", "lalala") );
+        informacion_estudiante.add( new Pair<String, String>("Email", estudiante.getEmail()) );
         informacion_estudiante.add( new Pair<String, String>("Factor p", estudiante.getFactor_p() + "") );
         informacion_estudiante.add( new Pair<String, String>("Promedio general", estudiante.getPromedio_general() + "") );
         /* HAY QUE AGREGAR MAS CAMPOS COMO SON CARRERA Y FACULTAD*/
