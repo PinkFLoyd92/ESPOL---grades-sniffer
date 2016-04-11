@@ -70,6 +70,8 @@ public class TablaNotasEstudiante extends CustomActivity{
             textViews[3] = new TextView(getApplicationContext());
             textViews[3].setText(materia.getNota().getTercer_termino()+"");
             row.addView(textViews[3]);
+            //row.setBackground(getResources().getDrawable(R.drawable.bordex));
+            row.setPadding(5,5,5,5);
             // add the TableRow to the TableLayout
             tabla_notas_estudiante.addView(row, new TableLayout.LayoutParams(GridLayout.LayoutParams.WRAP_CONTENT, GridLayout.LayoutParams.WRAP_CONTENT));
         }

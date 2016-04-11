@@ -1,22 +1,21 @@
 package com.fenonimous.polstalk;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.fenonimous.polstalk.custom.CustomActivity;
+import com.liulishuo.magicprogresswidget.MagicProgressBar;
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
 
 import java.util.ArrayList;
@@ -24,13 +23,17 @@ import java.util.HashMap;
 
 import com.fenonimous.polstalk.model.Estudiante;
 import Thread.ThreadSoap;
+import cn.dreamtobe.percentsmoothhandler.ISmoothTarget;
 
-public class BuscarEstudiante extends CustomActivity {
+public class BuscarEstudiante extends CustomActivity{
 
     private EditText nombres;
     private EditText apellidos;
     private EditText matricula;
     private CheckBox select_matricula;
+    private View mContentView;
+    private View mLoadingView;
+
     //Spinner dropdown_estudiantes;
     DilatingDotsProgressBar mDilatingDotsProgressBar;
     private ThreadSoap soap; //objeto el cual recibe como parametro
@@ -54,6 +57,8 @@ public class BuscarEstudiante extends CustomActivity {
         apellidos = (EditText)findViewById(R.id.apellido_estudiante);
         matricula = (EditText) findViewById(R.id.matricula_estudiante);
         select_matricula=(CheckBox)findViewById(R.id.select_matricula);
+        mContentView = findViewById(R.id.contenido);
+        mLoadingView = findViewById(R.id.loading_spinner);
     }
 
 
@@ -64,11 +69,25 @@ public class BuscarEstudiante extends CustomActivity {
             String estado = msg.getData().getString("wsConsultarPersonaPorNombres");
             /*aqui se agrega la animacion.*/
             if(estado == "procesando"){
-
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(),"SE ESTA PROCESANDO",Toast.LENGTH_SHORT).show();
+                        int mShortAnimationDuration = 100;
+                        // Initially hide the content view.
+                        // Set the content view to 0% opacity but visible, so that it is visible
+                        // (but fully transparent) during the animation.
+                        mContentView.setAlpha(0f);
+                        mContentView.setVisibility(View.VISIBLE);
+
+
+                        // Animate the loading view to 0% opacity. After the animation ends,
+                        // set its visibility to GONE as an optimization step (it won't
+                        // participate in layout passes, etc.)
+                        mLoadingView.setVisibility(View.VISIBLE);
+                        mLoadingView.animate().setDuration(700)
+                                .alpha(0f);
+
+                        //Toast.makeText(getApplicationContext(),"SE ESTA PROCESANDO",Toast.LENGTH_SHORT).show();
                     }
                 }, 100);
             //si se finaliza el proceso y  ha sido procesada correctamente la solicitud:
@@ -83,6 +102,13 @@ public class BuscarEstudiante extends CustomActivity {
                     @Override
                     //iniciamos la nueva actividad en esta parte.
                     public void run() {
+                        mLoadingView.setVisibility(View.GONE);
+                        // Animate the content view to 100% opacity, and clear any animation
+                        // listener set on the view.
+                        mContentView.animate()
+                                .alpha(1f)
+                                .setDuration(400)
+                                .setListener(null);
                         ArrayList<Estudiante> estudiantes = this.msg.getData().getParcelableArrayList("estudiantes");
                         Intent i = new Intent(getApplicationContext(),ListaEstudiantes.class);
                         i.putParcelableArrayListExtra("estudiantes",estudiantes);
@@ -97,7 +123,11 @@ public class BuscarEstudiante extends CustomActivity {
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        mLoadingView.setVisibility(View.GONE);
+                        mContentView.animate()
+                                .alpha(1f)
+                                .setDuration(400)
+                                .setListener(null);
                         /*ArrayAdapter<String> student_adapter = new ArrayAdapter<String>(getApplicationContext(),
                                 android.R.layout.simple_list_item_1, new ArrayList<String>());
                         dropdown_estudiantes.setAdapter(student_adapter);
@@ -173,4 +203,5 @@ public class BuscarEstudiante extends CustomActivity {
         inflater.inflate(R.menu.items, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 }

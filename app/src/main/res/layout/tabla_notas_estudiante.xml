@@ -5,17 +5,66 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="com.chatt.Login">
+    >
 
     <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="420px" android:layout_height="fill_parent">
+        android:layout_width="match_parent" android:layout_height="wrap_content">
     <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:padding="10dip"
         android:isScrollContainer="true"
         android:id="@+id/tabla_notas_estudiante">
 
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="5dip"
+            android:background="@drawable/bordex">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Materia"
+                android:padding="18dip" android:background="#b0b0b0"
+                android:textColor="#000"
+                android:layout_marginLeft="@dimen/pad_5dp"
+                android:layout_marginRight="@dimen/pad_5dp"
+                android:id="@+id/header_materia" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1er Parcial"
+                android:padding="18dip" android:background="#b0b0b0"
+                android:textColor="#000"
+                android:layout_marginLeft="@dimen/pad_5dp"
+                android:layout_marginRight="@dimen/pad_5dp"
+                android:id="@+id/header_nota1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2do Parcial"
+                android:id="@+id/header_nota2"
+                android:layout_marginLeft="@dimen/pad_5dp"
+                android:layout_marginRight="@dimen/pad_5dp"
+                android:padding="18dip" android:background="#b0b0b0"
+                android:textColor="#000"   />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mejoramiento"
+                android:layout_marginLeft="@dimen/pad_5dp"
+                android:layout_marginRight="@dimen/pad_5dp"
+                android:padding="18dip" android:background="#b0b0b0"
+                android:textColor="#000"
+                android:id="@+id/header_nota3" />
+
+        </TableRow>
     </TableLayout>
     </HorizontalScrollView>
 </ScrollView>
+
