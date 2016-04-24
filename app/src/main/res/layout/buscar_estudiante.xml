@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@android:style/Theme.WithActionBar"
     android:background="@color/white"
-    tools:context="com.chatt.Login">
+    tools:context="com.chatt.Login"
+    android:orientation="vertical">
+
+    <include android:id="@+id/appbar"
+        layout="@layout/toolbar" />
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -70,13 +76,15 @@
         </LinearLayout>
 
         <CheckBox
-            android:layout_width="289dp"
-            android:layout_height="82dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/matricula"
             android:id="@+id/select_matricula"
             android:checked="false"
             android:onClick="onCheckBoxClick"
-            android:layout_marginTop="40dp" />
+            android:layout_marginTop="40dp"
+            android:layout_weight="0.20"
+            android:textColor="#060606" />
 
         <Button
             android:id="@+id/btnLogin"
@@ -99,4 +107,4 @@
         android:layout_gravity="center"
         android:visibility="gone"/>
 
-</FrameLayout>
+</LinearLayout>

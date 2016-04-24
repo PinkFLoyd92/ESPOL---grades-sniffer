@@ -6,7 +6,9 @@
         <item name="android:homeAsUpIndicator">@drawable/back_arrow</item>
     </style>
 
-
+    <style name="ActionBar">
+        <item name="android:background">@drawable/editext_bg_gray</item>
+    </style>
     <style name="editext_graybg" parent="android:Widget.EditText">
         <item name="android:background">@drawable/editext_bg_gray</item>
         <item name="android:drawablePadding">@dimen/pad_10dp</item>

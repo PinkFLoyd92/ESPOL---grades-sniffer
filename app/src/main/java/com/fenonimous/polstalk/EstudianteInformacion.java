@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -32,10 +34,13 @@ public class EstudianteInformacion extends CustomActivity {
     private Button btn_notas;
     private ArrayList<Pair<String,String>> informacion_estudiante = new ArrayList<>();
     private Estudiante estudiante;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.estudiante_informacion);
+        setupActionBar(0);
+
         estudiante = (Estudiante) getIntent().getParcelableExtra("informacion_estudiante");
         this.listView = (ListView)findViewById(R.id.listaInformacionEstudiante);
         btn_notas = (Button)findViewById(R.id.btn_ver_notas);
@@ -49,14 +54,23 @@ public class EstudianteInformacion extends CustomActivity {
         this.listView.setAdapter(adaptador);
         adaptador.notifyDataSetChanged();
     }
+
     //se inicia la actividad para consultar notas de persona.
     public void consultarNotasPersona(View view){
         String matricula = estudiante.getCodigo_estudiante();
         String nombre = estudiante.getNombre_completo();
-        Intent i = new Intent(getApplicationContext(),NotasEstudiante.class);
+        Intent i = new Intent(getApplicationContext(), NotasEstudiante.class);
         i.putExtra("estudiante",this.estudiante);
         startActivity(i);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_choose_user, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     private class StudentInformationAdapter<T> extends ArrayAdapter<T>{
 
         public StudentInformationAdapter(Context context, int resource, List<T> objects) {

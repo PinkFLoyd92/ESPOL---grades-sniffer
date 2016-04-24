@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,6 +48,7 @@ public class ListaEstudiantes extends CustomActivity implements AdapterView.OnIt
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.lista_estudiantes);
 		inicializar_variables();
+		setupActionBar(0);
         this.listView.setAdapter(new StudentAdapter(this, R.id.listaEstudiante, Estudiantes));
         this.listView.setOnItemClickListener(this);
 	}
@@ -86,6 +89,13 @@ public class ListaEstudiantes extends CustomActivity implements AdapterView.OnIt
 		soap.start(); // damos run al hilo.
 
     }
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_choose_user, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
 
     /**
 	 * Clase adaptadora que maneja los elementos que se tienen en

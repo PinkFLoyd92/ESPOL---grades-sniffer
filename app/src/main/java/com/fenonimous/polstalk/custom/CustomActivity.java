@@ -1,9 +1,11 @@
 package com.fenonimous.polstalk.custom;
 
-import android.app.ActionBar;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import com.fenonimous.polstalk.R;
 import com.fenonimous.polstalk.utils.TouchEffect;
@@ -13,8 +15,8 @@ import com.fenonimous.polstalk.utils.TouchEffect;
  * inherit the common behaviors like implementing a common interface that can be
  * used in all child activities.
  */
-public class CustomActivity extends FragmentActivity implements OnClickListener
-{
+public class CustomActivity extends AppCompatActivity implements OnClickListener
+{//heredaba de FragmentActivity
 
 	/**
 	 * Apply this Constant as touch listener for views to provide alpha touch
@@ -29,7 +31,13 @@ public class CustomActivity extends FragmentActivity implements OnClickListener
 	public void setContentView(int layoutResID)
 	{
 		super.setContentView(layoutResID);
-		setupActionBar();
+		// Get a support ActionBar corresponding to this toolbar
+		Toolbar myToolbar = (Toolbar) findViewById(R.id.appbar);
+		if( myToolbar != null ){
+			setSupportActionBar(myToolbar);
+		}else{
+			Toast.makeText(getApplicationContext(),"El Toolbar es null",Toast.LENGTH_LONG).show();
+		}
 	}
 
 	/**
@@ -38,9 +46,9 @@ public class CustomActivity extends FragmentActivity implements OnClickListener
 	 * can override this method to change the behavior of ActionBar for
 	 * particular Activity
 	 */
-	protected void setupActionBar()
+	protected void setupActionBar(int parent)
 	{
-		final ActionBar actionBar = getActionBar();
+		final ActionBar actionBar = getSupportActionBar();
 		if (actionBar == null)
 			return;
 		actionBar.setDisplayShowTitleEnabled(true);
@@ -49,7 +57,7 @@ public class CustomActivity extends FragmentActivity implements OnClickListener
 		actionBar.setLogo(R.drawable.icon);
 		actionBar.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.actionbar_bg));
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled( parent == 0 ? true : false );
 		actionBar.setHomeButtonEnabled(true);
 	}
 
@@ -59,11 +67,11 @@ public class CustomActivity extends FragmentActivity implements OnClickListener
 	 * @param id
 	 *            the id
 	 * @return the view on which listeners applied
-	 */
+     */
 	public View setTouchNClick(int id)
 	{
 
-		View v = setClick(id);
+        View v = setClick(id);
 		if (v != null)
 			v.setOnTouchListener(TOUCH);
 		return v;
@@ -93,4 +101,6 @@ public class CustomActivity extends FragmentActivity implements OnClickListener
 	{
 
 	}
+
+
 }

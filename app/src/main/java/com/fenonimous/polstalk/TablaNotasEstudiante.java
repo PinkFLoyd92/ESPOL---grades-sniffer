@@ -1,16 +1,14 @@
 package com.fenonimous.polstalk;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.GridLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import com.fenonimous.polstalk.custom.CustomActivity;
 import com.fenonimous.polstalk.model.Materia;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 /**
@@ -24,6 +22,7 @@ public class TablaNotasEstudiante extends CustomActivity{
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tabla_notas_estudiante);
+        setupActionBar(0);
         inicializar_variables();
         llenar_tabla();
 
@@ -75,5 +74,12 @@ public class TablaNotasEstudiante extends CustomActivity{
             // add the TableRow to the TableLayout
             tabla_notas_estudiante.addView(row, new TableLayout.LayoutParams(GridLayout.LayoutParams.WRAP_CONTENT, GridLayout.LayoutParams.WRAP_CONTENT));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_choose_user, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

@@ -7,6 +7,9 @@
     tools:context="com.fenonimous.polstalk.EstudianteInformacion"
     android:weightSum="1">
 
+    <include android:id="@+id/appbar"
+        layout="@layout/toolbar" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

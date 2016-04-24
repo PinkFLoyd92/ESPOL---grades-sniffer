@@ -3,7 +3,12 @@
     package="com.fenonimous.polstalk"
     android:installLocation="preferExternal">
 
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="21" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -12,34 +17,52 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <activity android:name=".NotasEstudiante"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
-            </activity>
-
         <activity
             android:name=".BuscarEstudiante"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden"><!--android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"-->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".TablaNotasEstudiante">
+            android:name=".NotasEstudiante"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:parentActivityName="com.fenonimous.polstalk.BuscarEstudiante"><!--android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"-->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BuscarEstudiante" />
+        </activity>
+
+        <activity
+            android:name=".TablaNotasEstudiante"
+            android:parentActivityName="com.fenonimous.polstalk.BuscarEstudiante">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BuscarEstudiante" />
         </activity>
 
         <activity
             android:name=".ListaEstudiantes"
             android:label="@string/listaEstudiante"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.fenonimous.polstalk.BuscarEstudiante">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BuscarEstudiante" />
+        </activity>
 
-        <activity android:name=".EstudianteInformacion"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".EstudianteInformacion"
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.fenonimous.polstalk.BuscarEstudiante">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BuscarEstudiante" />
+        </activity>
     </application>
 
 </manifest>

@@ -1,7 +1,5 @@
 package com.fenonimous.polstalk;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,20 +8,16 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.fenonimous.polstalk.custom.CustomActivity;
-import com.liulishuo.magicprogresswidget.MagicProgressBar;
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import com.fenonimous.polstalk.model.Estudiante;
 import Thread.ThreadSoap;
-import cn.dreamtobe.percentsmoothhandler.ISmoothTarget;
 
 public class BuscarEstudiante extends CustomActivity{
 
@@ -37,6 +31,7 @@ public class BuscarEstudiante extends CustomActivity{
     //Spinner dropdown_estudiantes;
     DilatingDotsProgressBar mDilatingDotsProgressBar;
     private ThreadSoap soap; //objeto el cual recibe como parametro
+
     /*Hashmap formado de la siguiente estructura:
     soap_method:String, parametros:<parametros enviados>
     Este diccionario es enviado al hilo para ahi decidir la funcion.*/
@@ -45,10 +40,10 @@ public class BuscarEstudiante extends CustomActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.buscar_estudiante);
+        setupActionBar(1);
         inicializar_variables(); //se apunta a los elementos del xml buscar_estudiante, entre otros.
-
-
     }
 
     public void inicializar_variables(){
@@ -174,7 +169,8 @@ public class BuscarEstudiante extends CustomActivity{
 
     }
 
-
+//android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+  //  app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     //funcion que maneja el click en el checkbox para mostrar o no los widgets a mostrar.
     public void onCheckBoxClick(View view){
         boolean checked = ((CheckBox) view).isChecked();
@@ -200,7 +196,7 @@ public class BuscarEstudiante extends CustomActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.items, menu);
+        inflater.inflate(R.menu.menu_choose_user, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
