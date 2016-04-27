@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ public class BuscarEstudiante extends CustomActivity{
     private CheckBox select_matricula;
     private View mContentView;
     private View mLoadingView;
+    private boolean isCalendarioOn = false;
 
     //Spinner dropdown_estudiantes;
     DilatingDotsProgressBar mDilatingDotsProgressBar;
@@ -54,6 +56,8 @@ public class BuscarEstudiante extends CustomActivity{
         select_matricula=(CheckBox)findViewById(R.id.select_matricula);
         mContentView = findViewById(R.id.contenido);
         mLoadingView = findViewById(R.id.loading_spinner);
+        isCalendarioOn = getIntent().getBooleanExtra("CALENDARIO",false);
+        Log.d("ESTADO CALENDARIO",isCalendarioOn+"");
     }
 
 
@@ -107,7 +111,9 @@ public class BuscarEstudiante extends CustomActivity{
                         ArrayList<Estudiante> estudiantes = this.msg.getData().getParcelableArrayList("estudiantes");
                         Intent i = new Intent(getApplicationContext(),ListaEstudiantes.class);
                         i.putParcelableArrayListExtra("estudiantes",estudiantes);
+                        i.putExtra("CALENDARIO",isCalendarioOn);`
                         startActivity(i);
+
                         //finish();
                         Toast.makeText(getApplicationContext(),"Se obtuvieron los estudiantes, falta mostrarlos",Toast.LENGTH_LONG);
                     }

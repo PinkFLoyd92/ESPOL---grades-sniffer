@@ -91,6 +91,10 @@ public class ThreadSoap extends Thread{
                 call_wsInfoEstudiante();
                 break;
             }
+            case "customInfoCalendario":{
+                customInfoCalendario();
+                break;
+            }
             default:
             break;
         }
@@ -105,7 +109,7 @@ public class ThreadSoap extends Thread{
             Message msg = this.handler.obtainMessage();
             Bundle b = new Bundle();
             //se muestra en el hilo principal(UI) algo indicando que se esta procesando la solicitud..
-            b.putString("wsInfoEstudiante", "procesando");
+            b.putString("wsInfoEstudiante", "wsInfoEstudiante.procesando");
             msg.setData(b);
             handler.handleMessage(msg);
             b.clear();
@@ -113,14 +117,14 @@ public class ThreadSoap extends Thread{
             estudiante = this.soapService.call_wsInfoEstudiante((String) ((HashMap) mapa_datos.get("parametros")).get("matricula"));
 
             b.putParcelable("matricula_estudiante", estudiante);
-            b.putString("wsInfoEstudiante", "finalizado");
+            b.putString("wsInfoEstudiante", "wsInfoEstudiante.finalizado");
             msg.setData(b);
             handler.handleMessage(msg);
         }catch (Exception e){
             e.printStackTrace();
             Message msg = this.handler.obtainMessage();
             Bundle b = new Bundle();
-            b.putString("wsInfoEstudiante", "error");
+            b.putString("wsInfoEstudiante", "wsInfoEstudiante.error");
             msg.setData(b);
             handler.handleMessage(msg);
         }
@@ -210,4 +214,45 @@ public class ThreadSoap extends Thread{
         }
     }
 
+    private ArrayList<Materia> call_wsMateriasRegistradas(String codigoestudiante){
+        ArrayList<Materia> materias = new ArrayList<>();
+        materias = this.soapService.wsMateriasRegistradas(codigoestudiante);
+        return materias;
+    }
+
+    private void customInfoCalendario(){
+        ArrayList<Materia> materias = new ArrayList<>();
+        String codigoestudiante;
+        this.webResponse = "";
+        codigoestudiante = (String) ((HashMap) mapa_datos.get("parametros")).get("codigoestudiante");
+        try {
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            //se muestra en el hilo principal(UI) algo indicando que se esta procesando la solicitud..
+            b.putString("customInfoCalendario", "customInfoCalendario.procesando");
+            msg.setData(b);
+            handler.handleMessage(msg);
+            //se obtienen las materias
+
+            materias = call_wsMateriasRegistradas(codigoestudiante);
+
+
+            /*-----------------------------------------------------------------------------------*/
+            b.clear();
+            b.putString("customInfoCalendario","customInfoCalendario.finalizado");
+            b.putParcelableArrayList("materias", materias);
+            msg.setData(b);
+            handler.handleMessage(msg);
+
+        } catch (Exception e) {//RUNTIME EXCEPTION,IOEXCEPTION
+            e.printStackTrace();
+            Message msg = this.handler.obtainMessage();
+            Bundle b = new Bundle();
+            b.putString("customInfoCalendario", "customInfoCalendario.error");
+            msg.setData(b);
+            handler.handleMessage(msg);
+
+        }
+
+    }
 }

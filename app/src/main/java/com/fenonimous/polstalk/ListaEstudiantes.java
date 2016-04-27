@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +43,7 @@ public class ListaEstudiantes extends CustomActivity implements AdapterView.OnIt
 	private HashMap mapa_datos;
 	private Estudiante estudiante_selected;
 	private ThreadSoap soap; //objeto el cual recibe como parametro
+	private boolean isCalendarioOn = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -59,6 +61,8 @@ public class ListaEstudiantes extends CustomActivity implements AdapterView.OnIt
 		/*mContentView = findViewById(R.id.contenido);
 		mLoadingView = findViewById(R.id.loading_spinner);*/
 		mapa_datos = new HashMap();
+		isCalendarioOn = getIntent().getBooleanExtra("CALENDARIO",false);
+		Log.d("ESTADO CALENDARIO",isCalendarioOn+"");
 	}
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.FragmentActivity#onDestroy()
@@ -81,12 +85,21 @@ public class ListaEstudiantes extends CustomActivity implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         estudiante_selected = Estudiantes.get(position);
-		HashMap parametros = new HashMap();
-		parametros.put("matricula",estudiante_selected.getCodigo_estudiante());
-		mapa_datos.put("soap_method","wsInfoEstudiante");
-		mapa_datos.put("parametros",parametros);
-		soap = new ThreadSoap(this.manejador_hilo,mapa_datos); //seteamos los parametros del hilo
-		soap.start(); // damos run al hilo.
+		if(!isCalendarioOn){
+			HashMap parametros = new HashMap();
+			parametros.put("matricula",estudiante_selected.getCodigo_estudiante());
+			mapa_datos.put("soap_method","wsInfoEstudiante");
+			mapa_datos.put("parametros",parametros);
+			soap = new ThreadSoap(this.manejador_hilo,mapa_datos); //seteamos los parametros del hilo
+			soap.start(); // damos run al hilo.
+		}else{
+			HashMap parametros = new HashMap();
+			parametros.put("codigoestudiante",estudiante_selected.getCodigo_estudiante());
+			mapa_datos.put("soap_method","customInfoCalendario");
+			mapa_datos.put("parametros",parametros);
+			soap = new ThreadSoap(this.manejador_hilo,mapa_datos); //seteamos los parametros del hilo
+			soap.start(); // damos run al hilo.
+		}
 
     }
 
@@ -135,8 +148,11 @@ public class ListaEstudiantes extends CustomActivity implements AdapterView.OnIt
 	final Handler manejador_hilo = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
-			final String estado = msg.getData().getString("wsInfoEstudiante");
-			if(estado == "procesando"){
+			 String estado = msg.getData().getString("wsInfoEstudiante");
+			if (estado == null){
+				estado = msg.getData().getString("customInfoCalendario");
+			}
+			if(estado == "wsInfoEstudiante.procesando" || estado == "customInfoCalendario.procesando"){
 
 				new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
 					@Override
@@ -146,7 +162,7 @@ public class ListaEstudiantes extends CustomActivity implements AdapterView.OnIt
 					}
 				}, 100);
 				//si se finaliza el proceso y  ha sido procesada correctamente la solicitud:
-			}else if(estado == "finalizado"){
+			}else if(estado == "wsInfoEstudiante.finalizado"){
 
 				new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
 					Message msg;
@@ -170,11 +186,35 @@ public class ListaEstudiantes extends CustomActivity implements AdapterView.OnIt
 				}.init(msg),100);// parametros necesarios
 
 				//si ha ocurrido un error del otro lado, se para la animacion, no se carga el listview y se muestra el mensaje de error.
-			}else if(estado =="error"){
+			}else if(estado == "customInfoCalendario.finalizado"){
+				new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+					Message msg;
+					public Runnable init(Message msg){
+						this.msg = msg;
+						return this;
+					}
+					@Override
+					//iniciamos la nueva actividad en esta parte.
+					public void run() {
+
+						ArrayList<Materia> materias = this.msg.getData().getParcelableArrayList("materias");
+						Intent calendario_estudiante_intent = new Intent(getApplicationContext(), CalendarioEstudiante.class);
+						calendario_estudiante_intent.putExtra("materias", materias);
+						startActivity(calendario_estudiante_intent);
+					}
+				}.init(msg),100);// parametros necesarios
+			}else if(estado =="wsInfoEstudiante.error"){
 				new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
 					@Override
 					public void run() {
 						Toast.makeText(getApplicationContext(), "no se han encontrado materias en el termino", Toast.LENGTH_SHORT).show();
+					}
+				},100);
+			}else if (estado == "customInfoCalendario.error"){
+				new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(getApplicationContext(), "no se pudo cargar el calendario", Toast.LENGTH_SHORT).show();
 					}
 				},100);
 			}

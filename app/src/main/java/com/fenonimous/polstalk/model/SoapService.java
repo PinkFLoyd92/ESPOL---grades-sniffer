@@ -223,5 +223,43 @@ public class SoapService {
         }
         return materias;
     }
+    public ArrayList<Materia> wsMateriasRegistradas(String codigoestudiante){
+        ArrayList<Materia> materias = new ArrayList<>();
+        String webResponse= "";
+        SoapObject request = new SoapObject(NAMESPACE, "wsMateriasRegistradas");
+        PropertyInfo codigo_send =new PropertyInfo();
+        codigo_send.setName("codigoestudiante");
+        codigo_send.setValue(codigoestudiante);
+        codigo_send.setType(String.class);
+        request.addProperty(codigo_send);
+
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+        androidHttpTransport.debug = true;
+        try {
+            androidHttpTransport.call("http://tempuri.org/wsMateriasRegistradas", envelope);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (XmlPullParserException e1) {
+            e1.printStackTrace();
+        }
+
+        SoapObject response = null;
+
+        try {
+            response = (SoapObject) envelope.getResponse();
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+
+        SoapObject root = (SoapObject) response.getProperty(1);
+        SoapObject datos_root2 = (SoapObject) root.getProperty("NewDataSet");
+        Log.d("test_materias",datos_root2.toString());
+
+        return materias;
+    }
 
 }
