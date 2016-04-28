@@ -14,6 +14,15 @@ public class Horario_Materia implements Parcelable{
     private String bloque;
     private String idaula;
 
+    public Horario_Materia(String hora_inicio, String hora_fin, String nombre_dia, String aula, String bloque, String idaula) {
+        this.hora_inicio = hora_inicio;
+        this.hora_fin = hora_fin;
+        this.nombre_dia = nombre_dia;
+        this.aula = aula;
+        this.bloque = bloque;
+        this.idaula = idaula;
+    }
+
     public String getHora_inicio() {
         return hora_inicio;
     }

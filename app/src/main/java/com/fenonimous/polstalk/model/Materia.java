@@ -20,6 +20,15 @@ public class Materia implements Parcelable{
    private String tipoCurso=" ";
     private String codigo="";
     private ArrayList<Horario_Materia> horario = new ArrayList<>();
+    private int paralelo = -1;
+
+    public int getParalelo() {
+        return paralelo;
+    }
+
+    public void setParalelo(int paralelo) {
+        this.paralelo = paralelo;
+    }
 
     public String getTipoCurso() {
         return tipoCurso;
@@ -42,12 +51,27 @@ public class Materia implements Parcelable{
         this.codigo = codigo;
         this.horario= horario;
     }
+
+    public Materia(String nombre, String codigo,String tipoCurso,int paralelo){
+        this.nombre = nombre;
+        this.codigo = codigo;
+        this.tipoCurso= tipoCurso;
+        this.paralelo = paralelo;
+    }
     public  Materia(String nombre, String estado, int vez_tomada, int nota1, int nota2, int nota3){
         this.nota=new Nota(nota1,nota2,nota3);
         this.nombre = nombre;
         this.estado = estado;
         this.vez_tomada = vez_tomada;
 
+    }
+
+    public ArrayList<Horario_Materia> getHorario() {
+        return horario;
+    }
+
+    public void setHorario(ArrayList<Horario_Materia> horario) {
+        this.horario = horario;
     }
 
     protected Materia(Parcel in) {
@@ -59,6 +83,7 @@ public class Materia implements Parcelable{
         codigo = in.readString();
         horario = new ArrayList<>();
         in.readTypedList(horario,Horario_Materia.CREATOR);
+        paralelo = in.readInt();
        /* final List lista_horario_temp = Arrays.asList(in.readParcelableArray(Horario_Materia.class.getClassLoader()));
       try{  horario = new ArrayList<Horario_Materia>(lista_horario_temp.size());
         horario.addAll(lista_horario_temp);
@@ -133,5 +158,6 @@ public class Materia implements Parcelable{
         //dest.writeParcelableArray((Parcelable[])horario.toArray(),flags);
      //   dest.writeArray((Horario_Materia[])horario.toArray());
         dest.writeTypedList(horario);
+        dest.writeInt(paralelo);
     }
 }

@@ -111,7 +111,7 @@ public class BuscarEstudiante extends CustomActivity{
                         ArrayList<Estudiante> estudiantes = this.msg.getData().getParcelableArrayList("estudiantes");
                         Intent i = new Intent(getApplicationContext(),ListaEstudiantes.class);
                         i.putParcelableArrayListExtra("estudiantes",estudiantes);
-                        i.putExtra("CALENDARIO",isCalendarioOn);`
+                        i.putExtra("CALENDARIO",isCalendarioOn);
                         startActivity(i);
 
                         //finish();

@@ -17,6 +17,7 @@ import java.util.HashMap;
 
 import com.fenonimous.polstalk.BuscarEstudiante;
 import com.fenonimous.polstalk.model.Estudiante;
+import com.fenonimous.polstalk.model.Horario_Materia;
 import com.fenonimous.polstalk.model.Materia;
 import com.fenonimous.polstalk.model.SoapService;
 
@@ -220,6 +221,11 @@ public class ThreadSoap extends Thread{
         return materias;
     }
 
+    private ArrayList<Horario_Materia> call_wsHorarioClases(String codigo_materia,int paralelo){
+        ArrayList<Horario_Materia> horario = new ArrayList<>();
+        horario = this.soapService.wsHorarioClases(codigo_materia,paralelo);
+        return horario;
+    }
     private void customInfoCalendario(){
         ArrayList<Materia> materias = new ArrayList<>();
         String codigoestudiante;
@@ -235,7 +241,12 @@ public class ThreadSoap extends Thread{
             //se obtienen las materias
 
             materias = call_wsMateriasRegistradas(codigoestudiante);
-
+            Horario_Materia horario;
+            for(Materia materia: materias){
+                String codigo_temp = materia.getCodigo();
+                int paralelo = materia.getParalelo();
+                materia.setHorario(call_wsHorarioClases(codigo_temp,paralelo));
+            }
 
             /*-----------------------------------------------------------------------------------*/
             b.clear();

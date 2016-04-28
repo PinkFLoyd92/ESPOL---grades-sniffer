@@ -257,9 +257,77 @@ public class SoapService {
 
         SoapObject root = (SoapObject) response.getProperty(1);
         SoapObject datos_root2 = (SoapObject) root.getProperty("NewDataSet");
-        Log.d("test_materias",datos_root2.toString());
-
+       // Log.d("test_materias",datos_root2.toString());
+        SoapObject materia_registrada = new SoapObject();
+        for(int i = 0;i<datos_root2.getPropertyCount();i++){
+            materia_registrada = (SoapObject)datos_root2.getProperty(i);
+            String codigo_materia = materia_registrada.getProperty("COD_MATERIA_ACAD").toString();
+            String nombre = materia_registrada.getProperty("NOMBRE").toString();
+            //String idperiodo = materia_registrada.getProperty("IDPERIODO").toString();
+            int paralelo = Integer.parseInt(materia_registrada.getProperty("PARALELO").toString());
+            String tipocurso = materia_registrada.getProperty("TIPOCURSO").toString();
+            materias.add(new Materia(nombre,codigo_materia,tipocurso,paralelo));
+        }
         return materias;
     }
+
+    public ArrayList<Horario_Materia> wsHorarioClases(String codigo_materia,int paralelo){
+        ArrayList<Horario_Materia> horario = new ArrayList<>();
+        String webResponse= "";
+        SoapObject request = new SoapObject(NAMESPACE, "wsHorarioClases");
+        PropertyInfo codigo_send =new PropertyInfo();
+        codigo_send.setName("codigoMateria");
+        codigo_send.setValue(codigo_materia);
+        codigo_send.setType(String.class);
+        request.addProperty(codigo_send);
+
+        PropertyInfo paralelo_send = new PropertyInfo();
+        paralelo_send.setName("paralelo");
+        paralelo_send.setValue(paralelo);
+        paralelo_send.setType(Integer.class);
+        request.addProperty(paralelo_send);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+        androidHttpTransport.debug = true;
+        try {
+            androidHttpTransport.call("http://tempuri.org/wsHorarioClases", envelope);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (XmlPullParserException e1) {
+            e1.printStackTrace();
+        }
+
+        SoapObject response = null;
+
+        try {
+            response = (SoapObject) envelope.getResponse();
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+
+        SoapObject root = (SoapObject) response.getProperty(1);
+        SoapObject datos_root2 = (SoapObject) root.getProperty("NewDataSet");
+        // Log.d("test_materias",datos_root2.toString());
+        SoapObject horario_materia = new SoapObject();
+        Log.d("ROOT",datos_root2.toString());
+        for(int i = 0;i<datos_root2.getPropertyCount();i++){
+            horario_materia = (SoapObject)datos_root2.getProperty(i);
+            //Log.d("ROOT",datos_root2.getPropert);
+            String nombre = horario_materia.getProperty("NOMBRE").toString();
+            String hora_inicio = horario_materia.getProperty("HORAINICIO").toString();
+            String hora_fin = horario_materia.getPropertyAsString("HORAFIN");
+            String nombre_dia = horario_materia.getProperty("NOMBREDIA").toString();
+            String aula = horario_materia.getProperty("AULA").toString();
+            String bloque = horario_materia.getProperty("BLOQUE").toString();
+            String idaula = horario_materia.getProperty("IDAULA").toString();
+            //String codigo= horario_materia.getProperty("CODIGOMATERIA").toString();
+            horario.add(new Horario_Materia(hora_inicio,hora_fin,nombre_dia,aula,bloque,idaula));
+        }
+        return horario;
+    }
+
 
 }
