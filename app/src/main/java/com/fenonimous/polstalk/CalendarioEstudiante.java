@@ -93,7 +93,8 @@ public class CalendarioEstudiante extends CustomActivity {
                             //endTime.add(Calendar.HOUR_OF_DAY, 9);
                             endTime.set(Calendar.MONTH, newMonth -1);
                             endTime.set(Calendar.YEAR, newYear);
-                            endTime.set(Calendar.MINUTE, Integer.valueOf(minuto_fin));
+
+                            endTime.set(Calendar.MINUTE, Integer.valueOf(minuto_fin) == 0? 0:Integer.valueOf(minuto_fin)-2);
 
                             //endTime.set(Calendar.MINUTE, 30);
 
