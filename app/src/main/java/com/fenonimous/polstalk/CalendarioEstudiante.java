@@ -1,5 +1,6 @@
 package com.fenonimous.polstalk;
 
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Looper;
@@ -46,6 +47,14 @@ public class CalendarioEstudiante extends CustomActivity {
 
             @Override
             public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
+                int index_color = 0;
+                int[] colores = new int[6];
+                colores[0] = Color.GREEN;
+                colores[1] = Color.GRAY;
+                colores[2] = Color.DKGRAY;
+                colores[3] = Color.YELLOW;
+                colores[4] = Color.CYAN;
+                colores[5] = Color.MAGENTA;
                 List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
                 int counter = 0;
                 for(Materia materia: materias){
@@ -85,7 +94,7 @@ public class CalendarioEstudiante extends CustomActivity {
                             endTime.set(Calendar.MONTH, newMonth -1);
                             endTime.set(Calendar.YEAR, newYear);
                             endTime.set(Calendar.MINUTE, Integer.valueOf(minuto_fin));
-                            System.out.println("CALENDARIOOOOOOOOOOO  "+Calendar.HOUR_OF_DAY);
+
                             //endTime.set(Calendar.MINUTE, 30);
 
                             switch(dia_clase){
@@ -122,7 +131,10 @@ public class CalendarioEstudiante extends CustomActivity {
                                 default:
                                     break;
                             }
+
                             WeekViewEvent event = new WeekViewEvent(counter++,info_materia, startTime, endTime);
+                            event.setColor(colores[index_color]);
+
                             events.add(event);
                         }catch(Exception e){
                             e.printStackTrace();
@@ -131,7 +143,7 @@ public class CalendarioEstudiante extends CustomActivity {
 
 
                     }
-
+                    index_color = index_color == 5 ? 0: index_color + 1;
 
                 }
                 // Populate the week view with some events.
