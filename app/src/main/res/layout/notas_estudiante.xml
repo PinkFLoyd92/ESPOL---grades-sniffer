@@ -30,7 +30,7 @@
         <EditText
             android:id="@+id/nombre_estudiante"
             style="@style/editext_graybg"
-            android:layout_width="265dp"
+            android:layout_width="518dp"
             android:layout_height="62dp"
             android:drawableLeft="@drawable/ic_username"
             android:hint="@string/username"
@@ -40,7 +40,7 @@
 
         <EditText
             style="@style/editext_graybg"
-            android:layout_width="109dp"
+            android:layout_width="171dp"
             android:layout_height="37dp"
             android:inputType="numberSigned"
             android:ems="10"
@@ -54,14 +54,16 @@
             android:layout_height="49dp"
             android:text="Término"
             android:id="@+id/text_termino"
-             />
+            android:background="#fcfcfc" />
 
         <Spinner
             style="btn_green_white_bg"
-            android:layout_width="match_parent"
+            android:layout_width="293dp"
             android:layout_height="wrap_content"
             android:id="@+id/select_termino"
-            android:layout_margin="5dp" />
+            android:layout_margin="5dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#ffffff" />
         <LinearLayout
             android:id="@+id/main"
             android:layout_width="wrap_content"

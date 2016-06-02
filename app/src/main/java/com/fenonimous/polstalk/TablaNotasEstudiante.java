@@ -50,7 +50,7 @@ public class TablaNotasEstudiante extends CustomActivity{
         for (Materia materia:materias){
             TableRow row = new TableRow(this);
             // agregamos listviews a la tabla.
-            TextView[] textViews = new TextView[4];
+            TextView[] textViews = new TextView[5];
 
                 textViews[0] = new TextView(this);
             textViews[0].setText(materia.getNombre());
@@ -59,16 +59,21 @@ public class TablaNotasEstudiante extends CustomActivity{
 
             textViews[1] = new TextView(getApplicationContext());
             int nota = materia.getNota().getPrimer_termino();
-            textViews[1].setText(materia.getNota().getPrimer_termino()+"");
+            textViews[1].setText("                       "+materia.getNota().getPrimer_termino()+"");
             row.addView(textViews[1]);
 
             textViews[2] = new TextView(getApplicationContext());
-            textViews[2].setText(materia.getNota().getSegundo_termino()+"");
+            textViews[2].setText("                       "+materia.getNota().getSegundo_termino()+"");
             row.addView(textViews[2]);
 
             textViews[3] = new TextView(getApplicationContext());
-            textViews[3].setText(materia.getNota().getTercer_termino()+"");
+            textViews[3].setText("                       "+materia.getNota().getTercer_termino()+"");
             row.addView(textViews[3]);
+
+            textViews[4] = new TextView(getApplicationContext());
+            textViews[4].setText("                       "+materia.getVez_tomada()+"");
+            row.addView(textViews[4]);
+
             //row.setBackground(getResources().getDrawable(R.drawable.bordex));
             row.setPadding(5,5,5,5);
             // add the TableRow to the TableLayout

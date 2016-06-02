@@ -75,17 +75,20 @@ public class BuscarEstudiante extends CustomActivity{
                         // Initially hide the content view.
                         // Set the content view to 0% opacity but visible, so that it is visible
                         // (but fully transparent) during the animation.
-                        mContentView.setAlpha(0f);
-                        mContentView.setVisibility(View.VISIBLE);
+                        try {
+                            mContentView.setAlpha(0f);
+                            mContentView.setVisibility(View.VISIBLE);
 
 
-                        // Animate the loading view to 0% opacity. After the animation ends,
-                        // set its visibility to GONE as an optimization step (it won't
-                        // participate in layout passes, etc.)
-                        mLoadingView.setVisibility(View.VISIBLE);
-                        mLoadingView.animate().setDuration(700)
-                                .alpha(0f);
+                            // Animate the loading view to 0% opacity. After the animation ends,
+                            // set its visibility to GONE as an optimization step (it won't
+                            // participate in layout passes, etc.)
+                            mLoadingView.setVisibility(View.VISIBLE);
+                            mLoadingView.animate().setDuration(700)
+                                    .alpha(0f);
+                        }catch (NullPointerException e){
 
+                        }
                         //Toast.makeText(getApplicationContext(),"SE ESTA PROCESANDO",Toast.LENGTH_SHORT).show();
                     }
                 }, 100);
@@ -101,13 +104,18 @@ public class BuscarEstudiante extends CustomActivity{
                     @Override
                     //iniciamos la nueva actividad en esta parte.
                     public void run() {
-                        mLoadingView.setVisibility(View.GONE);
-                        // Animate the content view to 100% opacity, and clear any animation
-                        // listener set on the view.
-                        mContentView.animate()
-                                .alpha(1f)
-                                .setDuration(400)
-                                .setListener(null);
+                        try {
+                            mLoadingView.setVisibility(View.GONE);
+
+                            // Animate the content view to 100% opacity, and clear any animation
+                            // listener set on the view.
+                            mContentView.animate()
+                                    .alpha(1f)
+                                    .setDuration(400)
+                                    .setListener(null);
+                        }catch(NullPointerException e){
+
+                        }
                         ArrayList<Estudiante> estudiantes = this.msg.getData().getParcelableArrayList("estudiantes");
                         Intent i = new Intent(getApplicationContext(),ListaEstudiantes.class);
                         i.putParcelableArrayListExtra("estudiantes",estudiantes);
@@ -124,11 +132,15 @@ public class BuscarEstudiante extends CustomActivity{
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mLoadingView.setVisibility(View.GONE);
-                        mContentView.animate()
-                                .alpha(1f)
-                                .setDuration(400)
-                                .setListener(null);
+                        try {
+                            mLoadingView.setVisibility(View.GONE);
+                            mContentView.animate()
+                                    .alpha(1f)
+                                    .setDuration(400)
+                                    .setListener(null);
+                        }catch(NullPointerException e){
+
+                        }
                         /*ArrayAdapter<String> student_adapter = new ArrayAdapter<String>(getApplicationContext(),
                                 android.R.layout.simple_list_item_1, new ArrayList<String>());
                         dropdown_estudiantes.setAdapter(student_adapter);

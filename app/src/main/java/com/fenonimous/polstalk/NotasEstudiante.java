@@ -44,10 +44,15 @@ public class NotasEstudiante extends CustomActivity
         List<String> spinnerArray =  new ArrayList<String>();
         spinnerArray.add("1");
         spinnerArray.add("2");
+        spinnerArray.add("3");
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                select_termino.setAdapter(adapter);
+
+        select_termino.setAdapter(adapter);
+
+
 
     }
 
