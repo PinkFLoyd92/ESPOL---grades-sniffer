@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
